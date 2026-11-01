@@ -1,0 +1,17 @@
+/* Extracted via tpl-tools-design-extractor for tpl-serp-cafe-qrmenu-kot */
+:root {
+  --font-primary: 'Plus Jakarta Sans', sans-serif;
+  --font-accent: 'Space Grotesk', sans-serif;
+  --color-primary: #D97706;
+  --brand-primary: var(--color-primary);
+  --color-dark: #1C1917;
+  --brand-dark: var(--color-dark);
+  --bg-main: #FFFBEB;
+  --bg-canvas: #FEF3C7;
+  --bg-sand: var(--bg-canvas);
+  --border-color: #FDE68A;
+  --grid-gap-desktop: 28px 22px;
+  --grid-gap-mobile: 16px 14px;
+  --radius: 6px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
