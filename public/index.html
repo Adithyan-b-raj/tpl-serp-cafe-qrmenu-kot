@@ -2,180 +2,1490 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-wl-brand>ROAST & CRUST // Table #04 Order</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title data-wl-brand>ROAST & CRUST ARTISAN CAFE // Table QR Menu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="theme-tokens.css">
   <script src="whitelabel.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Table QR Mobile App Shell */
     body {
       background: var(--bg-main, #090D16);
-      color: #F8FAFC;
+      color: var(--text-main, #F8FAFC);
       font-family: var(--font-primary, 'Inter', sans-serif);
-      padding-bottom: 90px;
+      padding-bottom: 120px;
+      min-height: 100vh;
     }
-    .table-bar {
-      background: #10B981;
-      color: #000;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono, monospace);
-      font-weight: 700;
-      font-size: 12px;
+
+    /* Sticky Table Top Status Bar */
+    .table-top-bar {
       position: sticky;
       top: 0;
       z-index: 100;
-    }
-    .menu-header {
-      padding: 24px 20px 16px;
+      background: var(--color-primary, #10B981);
+      color: #051610;
+      padding: 10px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-    .filters {
-      display: flex;
-      gap: 8px;
-      padding: 0 20px 16px;
-      overflow-x: auto;
-    }
-    .chip {
-      background: #1E293B;
-      border: 1px solid #334155;
-      color: #FFF;
-      padding: 6px 14px;
-      border-radius: 999px;
+      font-family: var(--font-mono, monospace);
       font-size: 12px;
-      white-space: nowrap;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .table-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .table-selector-pill {
+      background: rgba(0, 0, 0, 0.85);
+      color: #FFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
       cursor: pointer;
     }
-    .chip.active { background: #10B981; color: #000; font-weight: 700; }
-
-    .food-list { padding: 0 20px; display: grid; gap: 14px; }
-    .food-card {
+    .kds-portal-link {
+      background: #090D16;
+      color: var(--color-primary, #10B981);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .kds-portal-link:hover {
       background: #111827;
+      color: #FFF;
+    }
+
+    /* Container */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Hero Brand Banner */
+    .cafe-hero {
+      padding: 20px 0 16px;
+      border-bottom: 1px solid var(--border-color, #1F2937);
+      margin-bottom: 16px;
+    }
+    .cafe-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+    .cafe-subtitle {
+      font-size: 13px;
+      color: var(--text-muted, #94A3B8);
+      margin-bottom: 12px;
+    }
+    .cafe-live-telemetry {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border-color, #1F2937);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: var(--font-mono, monospace);
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--color-primary, #10B981);
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px var(--color-primary, #10B981);
+      animation: pulseGlow 2s infinite;
+    }
+
+    /* Category Navigation */
+    .category-scroll-wrap {
+      position: sticky;
+      top: 42px;
+      z-index: 90;
+      background: var(--bg-main, #090D16);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color, #1F2937);
+    }
+    .category-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 4px;
+    }
+    .category-chips::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      background: var(--bg-canvas, #111827);
+      border: 1px solid var(--border-color, #1F2937);
+      color: var(--text-muted, #94A3B8);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .cat-btn:hover {
+      border-color: #374151;
+      color: #FFF;
+    }
+    .cat-btn.active {
+      background: var(--color-primary, #10B981);
+      color: #051610;
+      border-color: var(--color-primary, #10B981);
+      font-weight: 700;
+    }
+
+    /* Secondary Filter / Search Row */
+    .filter-search-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin: 14px 0;
+    }
+    .search-input {
+      flex: 1;
+      background: var(--bg-canvas, #111827);
+      border: 1px solid var(--border-color, #1F2937);
+      border-radius: 6px;
+      color: #FFF;
+      font-size: 13px;
+      padding: 8px 12px;
+      outline: none;
+      font-family: inherit;
+    }
+    .search-input:focus {
+      border-color: var(--color-primary, #10B981);
+    }
+    .diet-pills {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-canvas, #111827);
+      border: 1px solid var(--border-color, #1F2937);
+      padding: 3px;
+      border-radius: 6px;
+    }
+    .diet-pill {
+      background: transparent;
+      border: none;
+      color: var(--text-dim, #64748B);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .diet-pill.active {
+      background: var(--bg-surface, #1E293B);
+      color: #FFF;
+    }
+
+    /* Live Cooking Tracker Card (When Active Order exists) */
+    .order-tracker-card {
+      background: #111827;
+      border: 2px solid var(--color-primary, #10B981);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      display: none;
+    }
+    .tracker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-family: var(--font-mono, monospace);
+    }
+    .tracker-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-primary, #10B981);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tracker-timer {
+      font-size: 13px;
+      background: #090D16;
       border: 1px solid #1F2937;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #F8FAFC;
+    }
+    .stepper-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      position: relative;
+      margin: 14px 0 10px;
+    }
+    .step-item {
+      text-align: center;
+      font-size: 10px;
+      font-family: var(--font-mono, monospace);
+      color: var(--text-dim, #64748B);
+    }
+    .step-bar {
+      height: 6px;
+      background: #1E293B;
+      border-radius: 3px;
+      margin-bottom: 6px;
+      transition: background 0.3s;
+    }
+    .step-item.active .step-bar, .step-item.completed .step-bar {
+      background: var(--color-primary, #10B981);
+    }
+    .step-item.active {
+      color: #FFF;
+      font-weight: 700;
+    }
+    .step-item.completed {
+      color: var(--color-primary, #10B981);
+    }
+    .tracker-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .tracker-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: var(--font-mono, monospace);
+    }
+    .btn-bill-req {
+      background: #F59E0B;
+      color: #000;
+    }
+    .btn-view-receipt {
+      background: #1E293B;
+      color: #FFF;
+      border: 1px solid #334155;
+    }
+
+    /* Menu Items Grid */
+    .menu-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .food-card {
+      background: var(--bg-canvas, #111827);
+      border: 1px solid var(--border-color, #1F2937);
       border-radius: 10px;
       padding: 16px;
       display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .food-card:hover {
+      border-color: #374151;
+    }
+    .food-icon-box {
+      width: 56px;
+      height: 56px;
+      background: #1E293B;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .food-details {
+      flex: 1;
+    }
+    .food-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .food-diet-tag {
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .food-highlight-tag {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-primary, #10B981);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-family: var(--font-mono, monospace);
+    }
+    .food-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #F8FAFC;
+      margin-bottom: 4px;
+    }
+    .food-desc {
+      font-size: 12px;
+      color: var(--text-muted, #94A3B8);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .food-bottom-row {
+      display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .food-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-    .food-meta { font-size: 12px; color: #94A3B8; margin-bottom: 6px; }
-    .food-price { font-family: var(--font-mono); font-size: 14px; color: #10B981; font-weight: 700; }
-
-    .stepper {
+    .food-price {
+      font-family: var(--font-mono, monospace);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-primary, #10B981);
+    }
+    .btn-customize {
+      background: var(--bg-surface, #1E293B);
+      border: 1px solid #334155;
+      color: #FFF;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-customize:hover {
+      background: var(--color-primary, #10B981);
+      color: #051610;
+      border-color: var(--color-primary, #10B981);
+    }
+
+    /* Sticky Bottom Table Cart Bar */
+    .sticky-cart-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #111827;
+      border-top: 1px solid #1F2937;
+      padding: 12px 16px;
+      z-index: 95;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+    }
+    .cart-bar-inner {
+      max-width: 680px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-summary-text {
+      font-family: var(--font-mono, monospace);
+    }
+    .cart-summary-sub {
+      font-size: 11px;
+      color: var(--text-muted, #94A3B8);
+    }
+    .cart-summary-total {
+      font-size: 16px;
+      font-weight: 800;
+      color: #FFF;
+    }
+    .cart-action-btn {
+      background: var(--color-primary, #10B981);
+      color: #051610;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      font-family: var(--font-mono, monospace);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Drawer / Modal Overlay */
+    .drawer-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .drawer-content {
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 16px 16px 0 0;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
+      animation: slideUp 0.25s var(--ease-out-expo);
+    }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #1F2937;
+      padding-bottom: 12px;
+    }
+    .drawer-close {
       background: #1E293B;
-      padding: 4px 10px;
+      border: none;
+      color: #94A3B8;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Modifier Option Groups in Drawer */
+    .modifier-group {
+      margin-bottom: 16px;
+    }
+    .modifier-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      color: #F8FAFC;
+    }
+    .modifier-chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .mod-chip {
+      background: #1E293B;
+      border: 1px solid #334155;
+      color: #CBD5E1;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .mod-chip:hover {
+      border-color: #475569;
+    }
+    .mod-chip.selected {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--color-primary, #10B981);
+      color: #FFF;
+    }
+    .mod-extra-badge {
+      font-family: var(--font-mono, monospace);
+      font-size: 10px;
+      color: var(--color-primary, #10B981);
+    }
+
+    .notes-input {
+      width: 100%;
+      background: #090D16;
+      border: 1px solid #1F2937;
+      color: #FFF;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: inherit;
+      outline: none;
+      margin-top: 6px;
+    }
+
+    .drawer-footer-btn {
+      width: 100%;
+      background: var(--color-primary, #10B981);
+      color: #051610;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: var(--font-mono, monospace);
+      cursor: pointer;
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Cart Line Items in Drawer */
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #1F2937;
+    }
+    .cart-stepper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1E293B;
+      padding: 3px 8px;
       border-radius: 6px;
     }
-    .stepper button {
+    .cart-stepper button {
       background: none;
       border: none;
       color: #FFF;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
+      padding: 0 4px;
     }
 
-    /* Fixed Bottom KOT Bar */
-    .kot-bar {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: #111827;
-      border-top: 1px solid #1F2937;
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: var(--font-mono);
-      z-index: 100;
+    /* Modal for UPI Bill Settlement */
+    .bill-receipt-paper {
+      background: #090D16;
+      border: 1px dashed #334155;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: var(--font-mono, monospace);
+      font-size: 12px;
+      margin: 12px 0;
+    }
+    .upi-qr-box {
+      text-align: center;
+      padding: 16px;
+      background: #FFF;
+      border-radius: 8px;
+      margin: 12px 0;
+      color: #000;
+    }
+
+    /* Table Switcher Modal */
+    .table-grid-select {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 14px 0;
+    }
+    .tbl-select-btn {
+      background: #1E293B;
+      border: 1px solid #334155;
+      color: #FFF;
+      padding: 10px;
+      border-radius: 6px;
+      font-family: var(--font-mono, monospace);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+    .tbl-select-btn.active {
+      background: var(--color-primary, #10B981);
+      color: #000;
     }
   </style>
 </head>
 <body data-layout-archetype="mobile-qr-table-kds">
-  <div class="table-bar">
-    <span>TABLE #04 // INDOOR BOOTH</span>
-    <span>WAITER: ROHIT S.</span>
-    <a href="admin.html" style="color:#000; text-decoration:none;">[ OPEN KDS VIEW ]</a>
+
+  <!-- Sticky Top Table Status Bar -->
+  <header class="table-top-bar">
+    <div class="table-badge-group">
+      <div class="table-selector-pill" onclick="openTableSwitcher()">
+        <span>📍</span>
+        <span id="activeTableLabel">TABLE #04</span>
+        <span style="font-size:9px; opacity:0.7;">▼</span>
+      </div>
+      <span style="opacity:0.8; font-size:11px;" id="serverLabel">SERVER: ROHIT S.</span>
+    </div>
+    <a href="admin.html" class="kds-portal-link" title="Open Kitchen Display System Console">
+      <span>👨‍🍳</span>
+      <span>KDS CONSOLE</span>
+    </a>
+  </header>
+
+  <div class="container">
+
+    <!-- Cafe Brand Hero -->
+    <section class="cafe-hero">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h1 class="cafe-title">
+            <span data-wl-brand>ROAST & CRUST</span>
+            <span style="color:var(--color-primary, #10B981); font-size:22px;">ARTISAN CAFE</span>
+          </h1>
+          <p class="cafe-subtitle" data-wl-tagline>Specialty Coffee Roastery & Wood-Fired Sourdough Hearth</p>
+        </div>
+      </div>
+      <div class="cafe-live-telemetry">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="pulse-dot"></span>
+          <span>WOOD HEARTH ACTIVE</span>
+        </div>
+        <span>•</span>
+        <span>BARISTA DIALED IN</span>
+        <span>•</span>
+        <span style="color:var(--color-primary, #10B981);">TABLE ORDERING LIVE</span>
+      </div>
+    </section>
+
+    <!-- Live Order Cooking Tracker (Shown if Table 04 has an active order) -->
+    <section id="orderTrackerCard" class="order-tracker-card">
+      <div class="tracker-header">
+        <div class="tracker-title">
+          <span>🔥</span>
+          <span id="trackerKotId">KOT-409 • TABLE 04</span>
+        </div>
+        <div class="tracker-timer" id="trackerTimerDisplay">⏱️ 04:12 ELAPSED</div>
+      </div>
+
+      <!-- 4-Stage Stepper -->
+      <div class="stepper-container">
+        <div class="step-item completed" id="step1">
+          <div class="step-bar"></div>
+          <div>1. RECEIVED</div>
+        </div>
+        <div class="step-item active" id="step2">
+          <div class="step-bar"></div>
+          <div>2. IN KITCHEN</div>
+        </div>
+        <div class="step-item" id="step3">
+          <div class="step-bar"></div>
+          <div>3. PLATED & PASS</div>
+        </div>
+        <div class="step-item" id="step4">
+          <div class="step-bar"></div>
+          <div>4. SERVED</div>
+        </div>
+      </div>
+
+      <div style="font-size:12px; color:var(--text-muted); margin: 8px 0;" id="trackerItemsSummary">
+        1x Truffle Wild Mushroom Pizza, 2x Nitro Cold Brew Reserve, 1x Basque Burnt Cheesecake Slice
+      </div>
+
+      <div class="tracker-actions">
+        <button class="tracker-btn btn-bill-req" onclick="openBillModal()">REQUEST BILL & PAY (UPI) 💳</button>
+        <button class="tracker-btn btn-view-receipt" onclick="refreshTracker()">SYNC STATUS 🔄</button>
+      </div>
+    </section>
+
+    <!-- Category Tabs Navigation -->
+    <div class="category-scroll-wrap">
+      <div class="category-chips" id="categoryChips">
+        <button class="cat-btn active" onclick="setCategory('ALL')">ALL ITEMS</button>
+        <button class="cat-btn" onclick="setCategory('Espresso Bar')">☕ ESPRESSO BAR</button>
+        <button class="cat-btn" onclick="setCategory('All-Day Brunch')">🍳 ALL-DAY BRUNCH</button>
+        <button class="cat-btn" onclick="setCategory('Artisan Pizza')">🍕 ARTISAN PIZZA</button>
+        <button class="cat-btn" onclick="setCategory('Bakery & Desserts')">🥐 BAKERY & DESSERTS</button>
+      </div>
+    </div>
+
+    <!-- Search & Dietary Filter Row -->
+    <div class="filter-search-row">
+      <input type="text" id="menuSearch" class="search-input" placeholder="Search pizza, pour-overs, croissants..." oninput="handleSearch()">
+      <div class="diet-pills">
+        <button class="diet-pill active" id="dietAll" onclick="setDiet('ALL')">ALL</button>
+        <button class="diet-pill" id="dietVeg" onclick="setDiet('VEG')">🟢 VEG</button>
+        <button class="diet-pill" id="dietNonVeg" onclick="setDiet('NON_VEG')">🔴 NON-VEG</button>
+      </div>
+    </div>
+
+    <!-- Menu Items List -->
+    <main class="menu-grid" id="menuGrid">
+      <div style="padding: 30px; text-align: center; color: var(--text-muted); font-family: var(--font-mono);">
+        Loading specialty menu...
+      </div>
+    </main>
+
   </div>
 
-  <div class="menu-header">
-    <div>
-      <h1 style="font-size:24px; font-weight:800;" data-wl-brand>ROAST & CRUST ARTISAN CAFE</h1>
-      <div style="font-size:12px; color:#94A3B8;">Wood-Fired Pizza & Speciality Roastery</div>
+  <!-- Sticky Bottom Table Cart Bar -->
+  <footer class="sticky-cart-bar" id="stickyCartBar">
+    <div class="cart-bar-inner">
+      <div class="cart-summary-text">
+        <div class="cart-summary-sub"><span id="cartCountLabel">0 ITEMS</span> IN ORDER</div>
+        <div class="cart-summary-total" id="cartTotalLabel">₹0.00</div>
+      </div>
+      <button class="cart-action-btn" onclick="openCartDrawer()">
+        <span>VIEW TABLE ORDER</span>
+        <span>→</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Drawer: Item Customizer -->
+  <div class="drawer-overlay" id="customizerDrawer">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <div>
+          <h3 style="font-size:18px; font-weight:800;" id="customItemName">Custom Item</h3>
+          <div style="font-size:13px; color:var(--text-muted);" id="customItemDesc">Item description</div>
+        </div>
+        <button class="drawer-close" onclick="closeCustomizerDrawer()">✕</button>
+      </div>
+
+      <div id="modifierGroupsContainer">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="modifier-group">
+        <div class="modifier-title">Special Kitchen Instructions</div>
+        <input type="text" id="itemCustomNote" class="notes-input" placeholder="e.g. Less ice, extra hot, oat milk...">
+      </div>
+
+      <button class="drawer-footer-btn" onclick="addCustomizedItemToCart()">
+        <span>ADD TO TABLE ORDER</span>
+        <span id="customItemTotalBtn">₹0.00</span>
+      </button>
     </div>
   </div>
 
-  <div class="filters">
-    <div class="chip active">ALL ITEMS</div>
-    <div class="chip">🟢 VEG ONLY</div>
-    <div class="chip">🔴 WOOD-FIRED PIZZAS</div>
-    <div class="chip">COLD BREWS</div>
-  </div>
+  <!-- Drawer: Full Table Cart -->
+  <div class="drawer-overlay" id="cartDrawer">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <div>
+          <h3 style="font-size:18px; font-weight:800;">TABLE <span id="cartTableNum">04</span> ORDER</h3>
+          <div style="font-size:12px; color:var(--text-muted);">Review items before firing KOT to kitchen</div>
+        </div>
+        <button class="drawer-close" onclick="closeCartDrawer()">✕</button>
+      </div>
 
-  <div class="food-list">
-    <div class="food-card">
-      <div>
-        <div class="food-name">Truffle Wild Mushroom Pizza (11")</div>
-        <div class="food-meta">Portobello · Fior Di Latte · White Truffle Oil</div>
-        <div class="food-price">₹680.00</div>
+      <div id="cartItemsList">
+        <!-- Rendered items -->
       </div>
-      <div class="stepper">
-        <button onclick="updateQty(this, -1)">-</button>
-        <span>1</span>
-        <button onclick="updateQty(this, 1)">+</button>
+
+      <div style="margin-top:16px; border-top:1px dashed #334155; padding-top:12px; font-family:var(--font-mono); font-size:12px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:#94A3B8;">
+          <span>Subtotal</span>
+          <span id="billSubtotal">₹0.00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:#94A3B8;">
+          <span>CGST (2.5%) + SGST (2.5%)</span>
+          <span id="billTaxes">₹0.00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:15px; font-weight:800; color:#FFF; margin-top:8px;">
+          <span>Grand Total</span>
+          <span id="billGrandTotal">₹0.00</span>
+        </div>
       </div>
-    </div>
-    <div class="food-card">
-      <div>
-        <div class="food-name">Smoked Burrata & Pesto Gnocchi</div>
-        <div class="food-meta">Hand-rolled potato gnocchi · Basil Genovese</div>
-        <div class="food-price">₹540.00</div>
+
+      <div style="margin-top:14px;">
+        <input type="text" id="orderNotesInput" class="notes-input" placeholder="Kitchen allergy or server note...">
       </div>
-      <div class="stepper">
-        <button onclick="updateQty(this, -1)">-</button>
-        <span>0</span>
-        <button onclick="updateQty(this, 1)">+</button>
-      </div>
-    </div>
-    <div class="food-card">
-      <div>
-        <div class="food-name">Single Origin Nitro Cold Brew</div>
-        <div class="food-meta">Ethiopia Yirgacheffe · 18hr Steeped</div>
-        <div class="food-price">₹280.00</div>
-      </div>
-      <div class="stepper">
-        <button onclick="updateQty(this, -1)">-</button>
-        <span>2</span>
-        <button onclick="updateQty(this, 1)">+</button>
-      </div>
+
+      <button class="drawer-footer-btn" onclick="sendKotToKitchen()" id="fireKotBtn">
+        <span>SEND KOT TO KITCHEN 🔥</span>
+        <span id="fireKotPrice">₹0.00</span>
+      </button>
     </div>
   </div>
 
-  <div class="kot-bar">
-    <div>
-      <div style="font-size:11px; color:#94A3B8;">TABLE #04 LIVE KOT</div>
-      <div style="font-size:15px; font-weight:700;">TOTAL: ₹1,240.00</div>
+  <!-- Modal: Request Bill & Pay via UPI -->
+  <div class="drawer-overlay" id="billModal">
+    <div class="drawer-content" style="max-width:500px;">
+      <div class="drawer-header">
+        <div>
+          <h3 style="font-size:18px; font-weight:800;">TABLE TAX INVOICE & UPI PAY</h3>
+          <div style="font-size:12px; color:var(--text-muted);">FSSAI Lic: 11223344001928 • GSTIN: 32AABCR9988C1Z4</div>
+        </div>
+        <button class="drawer-close" onclick="closeBillModal()">✕</button>
+      </div>
+
+      <div class="bill-receipt-paper" id="billPaperContent">
+        <!-- Populated via JS -->
+      </div>
+
+      <!-- Split Bill Calculator -->
+      <div style="background:#1E293B; padding:12px; border-radius:6px; margin:12px 0;">
+        <div style="font-size:12px; font-weight:700; margin-bottom:6px; display:flex; justify-content:space-between;">
+          <span>SPLIT BILL AMONG DINERS</span>
+          <span id="splitPerPersonLabel" style="color:var(--color-primary); font-family:var(--font-mono);">₹0.00 / person</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="cat-btn active" style="padding:4px 10px; font-size:11px;" onclick="setDinerSplit(1, this)">1 Diner</button>
+          <button class="cat-btn" style="padding:4px 10px; font-size:11px;" onclick="setDinerSplit(2, this)">2 Diners</button>
+          <button class="cat-btn" style="padding:4px 10px; font-size:11px;" onclick="setDinerSplit(3, this)">3 Diners</button>
+          <button class="cat-btn" style="padding:4px 10px; font-size:11px;" onclick="setDinerSplit(4, this)">4 Diners</button>
+        </div>
+      </div>
+
+      <!-- Simulated UPI QR Code -->
+      <div class="upi-qr-box">
+        <div style="font-weight:700; font-size:13px; margin-bottom:4px;">SCAN ANY UPI APP TO PAY</div>
+        <div style="font-size:11px; color:#555; margin-bottom:10px;">GPay, PhonePe, Paytm, BHIM</div>
+        <svg width="140" height="140" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
+          <rect width="100" height="100" fill="#FFF"/>
+          <!-- Position Detection Squares -->
+          <rect x="5" y="5" width="26" height="26" fill="#000" rx="3"/>
+          <rect x="9" y="9" width="18" height="18" fill="#FFF"/>
+          <rect x="13" y="13" width="10" height="10" fill="#000"/>
+
+          <rect x="69" y="5" width="26" height="26" fill="#000" rx="3"/>
+          <rect x="73" y="9" width="18" height="18" fill="#FFF"/>
+          <rect x="77" y="13" width="10" height="10" fill="#000"/>
+
+          <rect x="5" y="69" width="26" height="26" fill="#000" rx="3"/>
+          <rect x="9" y="73" width="18" height="18" fill="#FFF"/>
+          <rect x="13" y="77" width="10" height="10" fill="#000"/>
+
+          <!-- Simulated Pattern Cells -->
+          <rect x="36" y="8" width="5" height="5" fill="#000"/>
+          <rect x="44" y="8" width="5" height="5" fill="#000"/>
+          <rect x="52" y="14" width="5" height="5" fill="#000"/>
+          <rect x="36" y="24" width="8" height="4" fill="#000"/>
+          <rect x="8" y="38" width="8" height="6" fill="#000"/>
+          <rect x="22" y="42" width="6" height="6" fill="#000"/>
+          <rect x="36" y="36" width="10" height="10" fill="#000"/>
+          <rect x="52" y="36" width="6" height="6" fill="#000"/>
+          <rect x="64" y="42" width="8" height="6" fill="#000"/>
+          <rect x="80" y="38" width="12" height="6" fill="#000"/>
+          <rect x="36" y="52" width="6" height="8" fill="#000"/>
+          <rect x="48" y="52" width="8" height="8" fill="#000"/>
+          <rect x="62" y="54" width="6" height="6" fill="#000"/>
+          <rect x="80" y="52" width="10" height="6" fill="#000"/>
+          <rect x="36" y="68" width="8" height="6" fill="#000"/>
+          <rect x="48" y="68" width="6" height="8" fill="#000"/>
+          <rect x="62" y="68" width="10" height="8" fill="#000"/>
+          <rect x="80" y="68" width="8" height="6" fill="#000"/>
+          <rect x="36" y="82" width="6" height="8" fill="#000"/>
+          <rect x="48" y="82" width="8" height="6" fill="#000"/>
+          <rect x="62" y="82" width="6" height="8" fill="#000"/>
+          <rect x="76" y="82" width="12" height="6" fill="#000"/>
+        </svg>
+        <div style="font-family:monospace; font-size:11px; margin-top:8px; font-weight:700;">roastandcrust@okhdfcbank</div>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button class="drawer-footer-btn" style="flex:1; margin-top:0;" onclick="confirmUpiPayment()">
+          <span>NOTIFY SERVER // PAID VIA UPI ✓</span>
+        </button>
+      </div>
     </div>
-    <button style="background:#10B981; color:#000; border:none; padding:10px 20px; font-weight:700; border-radius:6px; cursor:pointer;" onclick="sendKot()">SEND KOT TO KITCHEN 🔥</button>
   </div>
 
+  <!-- Modal: Table Switcher -->
+  <div class="drawer-overlay" id="tableSwitcherModal">
+    <div class="drawer-content" style="max-width:440px;">
+      <div class="drawer-header">
+        <div>
+          <h3 style="font-size:18px; font-weight:800;">SELECT YOUR TABLE</h3>
+          <div style="font-size:12px; color:var(--text-muted);">Switch active table number for QR ordering demo</div>
+        </div>
+        <button class="drawer-close" onclick="closeTableSwitcher()">✕</button>
+      </div>
+      <div class="table-grid-select" id="tableGridContainer">
+        <!-- 12 Tables -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
   <script>
-    function updateQty(btn, chg) {
-      const sp = btn.parentElement.querySelector('span');
-      let val = Math.max(0, parseInt(sp.textContent) + chg);
-      sp.textContent = val;
+    // State
+    let currentTable = '04';
+    let menuItems = [];
+    let activeCategory = 'ALL';
+    let activeDiet = 'ALL';
+    let searchQuery = '';
+    let cart = [];
+    let activeCustomizingItem = null;
+    let selectedModifiers = {};
+    let activeOrder = null;
+    let timerInterval = null;
+    let pollInterval = null;
+    let splitCount = 1;
+
+    // Built-in Seed Fallback
+    const FALLBACK_ITEMS = [
+      { id: 'item_esp_01', name: 'Specialty Double Espresso', category: 'Espresso Bar', station: 'Espresso Bar', description: 'Direct-trade Coorg Arabica single origin. Vibrant citrus brightness, dark cocoa finish.', price_inr: 180, is_veg: true, available: true, badge: 'Single Origin', image_icon: '☕', modifiers: [{ name: 'Roast Profile', required: true, options: [{ label: 'Medium Coorg Washed', extra: 0, default: true }, { label: 'Dark Chikmagalur Honey', extra: 0 }] }] },
+      { id: 'item_esp_02', name: 'Spanish Cortado', category: 'Espresso Bar', station: 'Espresso Bar', description: '1:1 ratio of double ristretto cut with silky textured steamed milk. Rich & intense.', price_inr: 240, is_veg: true, available: true, badge: 'Barista Pick', image_icon: '🥛', modifiers: [{ name: 'Milk Choice', required: true, options: [{ label: 'Whole Milk', extra: 0, default: true }, { label: 'Oat Milk (Oatly)', extra: 40 }, { label: 'Almond Milk', extra: 50 }] }, { name: 'Sweetness', required: false, options: [{ label: '0% Sugar', extra: 0, default: true }, { label: '50% Demerara', extra: 0 }, { label: 'Condensed Milk', extra: 20 }] }, { name: 'Add-ons', multiple: true, options: [{ label: 'Extra Espresso Shot', extra: 60 }, { label: 'Vanilla Bean Drop', extra: 40 }] }] },
+      { id: 'item_esp_03', name: 'Ceremonial Matcha Latte', category: 'Espresso Bar', station: 'Espresso Bar', description: 'First-harvest Uji ceremonial matcha whisked with warm textured oat milk.', price_inr: 290, is_veg: true, available: true, badge: 'Superfood', image_icon: '🍵', modifiers: [{ name: 'Milk Choice', required: true, options: [{ label: 'Oat Milk', extra: 0, default: true }, { label: 'Almond Milk', extra: 20 }, { label: 'Whole Milk', extra: 0 }] }, { name: 'Sweetness', required: false, options: [{ label: 'Unsweetened', extra: 0, default: true }, { label: 'Wild Forest Honey', extra: 30 }] }] },
+      { id: 'item_esp_04', name: 'Nitro Cold Brew Reserve', category: 'Espresso Bar', station: 'Espresso Bar', description: 'Steeped for 18 hours in cold filtered mountain water, infused with food-grade nitrogen.', price_inr: 280, is_veg: true, available: true, badge: 'Draft Pour', image_icon: '🧊', modifiers: [{ name: 'Syrup Infusion', multiple: false, options: [{ label: 'Original Straight Black', extra: 0, default: true }, { label: 'Vanilla Cream Cold Foam Float', extra: 50 }] }] },
+      { id: 'item_brunch_01', name: 'Sourdough Avocado Tartine', category: 'All-Day Brunch', station: 'Hot Kitchen & Grill', description: 'Crushed Hass avocado on 36hr fermented sourdough, Danish feta, chili flakes & dukkah.', price_inr: 420, is_veg: true, available: true, badge: 'Bestseller', image_icon: '🥑', modifiers: [{ name: 'Add-ons', multiple: true, options: [{ label: 'Poached Farmhouse Egg', extra: 45 }, { label: 'Danish Feta Extra', extra: 60 }] }] },
+      { id: 'item_brunch_02', name: 'Brioche French Toast w/ Maple & Berries', category: 'All-Day Brunch', station: 'Hot Kitchen & Grill', description: 'Golden-crusted brioche soaked in vanilla bean custard, pure Canadian maple syrup & fresh berries.', price_inr: 460, is_veg: true, available: true, badge: 'Sweet Brunch', image_icon: '🍞', modifiers: [{ name: 'Add-ons', multiple: true, options: [{ label: 'Fresh Organic Berries', extra: 70 }, { label: 'Whipped Clotted Cream', extra: 50 }] }] },
+      { id: 'item_brunch_03', name: 'Smoked Salmon Croissant Benedict', category: 'All-Day Brunch', station: 'Hot Kitchen & Grill', description: 'Norwegian smoked salmon, soft poached eggs & yuzu hollandaise on a buttery Parisian croissant.', price_inr: 560, is_veg: false, available: true, badge: 'Chef Signature', image_icon: '🥐', modifiers: [{ name: 'Add-ons', multiple: true, options: [{ label: 'Extra Smoked Salmon (40g)', extra: 160 }, { label: 'Fresh Baby Spinach', extra: 40 }] }] },
+      { id: 'item_pizza_01', name: 'Truffle Wild Mushroom Pizza 11"', category: 'Artisan Pizza', station: 'Hot Kitchen & Grill', description: 'Fior di latte, portobello & shiitake mushrooms, fresh thyme, finished with white truffle oil.', price_inr: 680, is_veg: true, available: true, badge: 'Wood-Fired', image_icon: '🍄', modifiers: [{ name: 'Crust Style', required: true, options: [{ label: 'Traditional Neapolitan', extra: 0, default: true }, { label: 'Thin & Crispy Roman', extra: 0 }] }, { name: 'Toppings', multiple: true, options: [{ label: 'Artisanal White Truffle Oil Drizzle', extra: 90 }, { label: 'Fresh Burrata Ball on Top', extra: 160 }] }] },
+      { id: 'item_pizza_02', name: 'Burrata Margherita & Basil Genovese 11"', category: 'Artisan Pizza', station: 'Hot Kitchen & Grill', description: 'San Marzano D.O.P. tomatoes, fresh artisanal whole burrata, cold-pressed EVO & sweet basil.', price_inr: 620, is_veg: true, available: true, badge: 'Classic D.O.P.', image_icon: '🍕', modifiers: [{ name: 'Toppings', multiple: true, options: [{ label: 'Extra Burrata Center', extra: 140 }, { label: 'Hot Honey Drizzle', extra: 50 }] }] },
+      { id: 'item_pizza_03', name: 'Spicy Pepperoni & Hot Honey Napoli 11"', category: 'Artisan Pizza', station: 'Hot Kitchen & Grill', description: 'Crisp cupping pork pepperoni, mozzarella, chili flakes, drizzled with raw infused hot honey.', price_inr: 740, is_veg: false, available: true, badge: 'Fan Favorite', image_icon: '🌶️', modifiers: [{ name: 'Heat Level', required: false, options: [{ label: 'Standard Hot Honey', extra: 0, default: true }, { label: 'Double Hot Honey', extra: 30 }] }] },
+      { id: 'item_bakery_01', name: 'Basque Burnt Cheesecake Slice', category: 'Bakery & Desserts', station: 'Bakery & Pastry', description: 'Caramelized blackened crust with an unctuous, molten cheese center. Served with house berry coulis.', price_inr: 340, is_veg: true, available: true, badge: 'Award-Winning', image_icon: '🍰', modifiers: [{ name: 'Topping Sauce', multiple: false, options: [{ label: 'Warm Raspberry Coulis', extra: 0, default: true }, { label: 'Salted Dulce de Leche', extra: 40 }] }] },
+      { id: 'item_bakery_03', name: 'Twice-Baked Almond Croissant', category: 'Bakery & Desserts', station: 'Bakery & Pastry', description: 'Buttery laminate pastry filled with almond frangipane, topped with toasted sliced almonds.', price_inr: 220, is_veg: true, available: true, badge: 'Bakery Fresh', image_icon: '🥐', modifiers: [{ name: 'Warm Up Option', required: false, options: [{ label: 'Warm & Crisp', extra: 0, default: true }, { label: 'Room Temperature', extra: 0 }] }] }
+    ];
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Resolve table from URL or default
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('table')) {
+        currentTable = String(urlParams.get('table')).padStart(2, '0');
+      }
+      updateTableDisplay();
+
+      // 2. Fetch Menu Items
+      loadMenu();
+
+      // 3. Check for Active Order for Table
+      syncActiveOrder();
+
+      // 4. Polling for Live KOT Status
+      pollInterval = setInterval(syncActiveOrder, 5000);
+    });
+
+    function updateTableDisplay() {
+      document.getElementById('activeTableLabel').textContent = `TABLE #${currentTable}`;
+      document.getElementById('cartTableNum').textContent = currentTable;
+      const serverNames = { '01':'Aravind K.', '02':'Aravind K.', '03':'Rohit S.', '04':'Rohit S.', '05':'Rohit S.', '06':'Priya M.', '07':'Priya M.', '08':'Priya M.', '09':'Rohit S.', '10':'Priya M.', '11':'Aravind K.', '12':'Aravind K.' };
+      document.getElementById('serverLabel').textContent = `SERVER: ${serverNames[currentTable] || 'ROHIT S.'}`;
     }
-    function sendKot() {
-      alert('Order transmitted to Barista & Pizza Hearth KDS screens! Est prep: 14 mins.');
+
+    async function loadMenu() {
+      try {
+        const res = await fetch('/api/menu');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.items && data.items.length > 0) {
+            menuItems = data.items;
+            renderMenu();
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('API error, using fallback:', e);
+      }
+      menuItems = FALLBACK_ITEMS;
+      renderMenu();
+    }
+
+    function renderMenu() {
+      const grid = document.getElementById('menuGrid');
+      let filtered = menuItems.filter(item => {
+        if (activeCategory !== 'ALL' && item.category !== activeCategory) return false;
+        if (activeDiet === 'VEG' && !item.is_veg) return false;
+        if (activeDiet === 'NON_VEG' && item.is_veg) return false;
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          const matchTitle = item.name.toLowerCase().includes(q);
+          const matchDesc = (item.description || '').toLowerCase().includes(q);
+          if (!matchTitle && !matchDesc) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="padding: 40px; text-align: center; color: var(--text-muted); font-family: var(--font-mono);">
+            No menu items found matching criteria.
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <article class="food-card">
+          <div class="food-icon-box">${item.image_icon || '☕'}</div>
+          <div class="food-details">
+            <div class="food-badge-row">
+              <span class="food-diet-tag">${item.is_veg ? '🟢 VEG' : '🔴 NON-VEG'}</span>
+              ${item.badge ? `<span class="food-highlight-tag">${item.badge}</span>` : ''}
+              <span style="font-size:10px; color:var(--text-dim); margin-left:auto; font-family:var(--font-mono);">${item.prep_time_mins || 8}m prep</span>
+            </div>
+            <h3 class="food-title">${item.name}</h3>
+            <p class="food-desc">${item.description || ''}</p>
+            <div class="food-bottom-row">
+              <div class="food-price">₹${item.price_inr.toFixed(2)}</div>
+              <button class="btn-customize" onclick="openCustomizer('${item.id}')">
+                <span>CUSTOMIZE & ADD</span>
+                <span>+</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Category & Search Filters
+    function setCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('#categoryChips .cat-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.includes(cat.toUpperCase()) || (cat === 'ALL' && b.textContent === 'ALL ITEMS'));
+      });
+      renderMenu();
+    }
+
+    function setDiet(diet) {
+      activeDiet = diet;
+      document.getElementById('dietAll').classList.toggle('active', diet === 'ALL');
+      document.getElementById('dietVeg').classList.toggle('active', diet === 'VEG');
+      document.getElementById('dietNonVeg').classList.toggle('active', diet === 'NON_VEG');
+      renderMenu();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('menuSearch').value.trim();
+      renderMenu();
+    }
+
+    // Item Customizer Modal Logic
+    function openCustomizer(itemId) {
+      const item = menuItems.find(i => i.id === itemId);
+      if (!item) return;
+      activeCustomizingItem = item;
+      selectedModifiers = {};
+
+      document.getElementById('customItemName').textContent = item.name;
+      document.getElementById('customItemDesc').textContent = item.description || '';
+      document.getElementById('itemCustomNote').value = '';
+
+      // Initialize default selections
+      const modContainer = document.getElementById('modifierGroupsContainer');
+      const groups = item.modifiers || [];
+
+      if (groups.length === 0) {
+        modContainer.innerHTML = `
+          <div style="font-size:12px; color:var(--text-muted); padding:10px 0;">
+            Chef serves this specialty dish crafted to traditional perfection. Add any special requests below.
+          </div>
+        `;
+      } else {
+        modContainer.innerHTML = groups.map((g, gIdx) => {
+          // Set defaults
+          const isMultiple = g.multiple === true;
+          if (!isMultiple && g.options && g.options.length > 0) {
+            const defOpt = g.options.find(o => o.default) || g.options[0];
+            selectedModifiers[g.name] = [defOpt];
+          } else {
+            selectedModifiers[g.name] = [];
+          }
+
+          return `
+            <div class="modifier-group">
+              <div class="modifier-title">
+                <span>${g.name} ${g.required ? '<span style="color:#EF4444; font-size:10px;">*REQUIRED</span>' : '<span style="color:var(--text-dim); font-size:10px;">OPTIONAL</span>'}</span>
+                <span style="font-size:10px; color:var(--text-dim);">${isMultiple ? 'Pick Multiple' : 'Select One'}</span>
+              </div>
+              <div class="modifier-chips-container" data-group="${g.name}" data-multiple="${isMultiple}">
+                ${g.options.map(opt => {
+                  const isSelected = selectedModifiers[g.name]?.some(x => x.label === opt.label);
+                  return `
+                    <div class="mod-chip ${isSelected ? 'selected' : ''}" onclick="toggleModifier(this, '${g.name}', '${opt.label.replace(/'/g, "\\'")}', ${opt.extra || 0}, ${isMultiple})">
+                      <span>${opt.label}</span>
+                      ${opt.extra > 0 ? `<span class="mod-extra-badge">+₹${opt.extra}</span>` : ''}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      updateCustomizerPrice();
+      document.getElementById('customizerDrawer').style.display = 'flex';
+    }
+
+    function toggleModifier(el, groupName, label, extra, isMultiple) {
+      if (!selectedModifiers[groupName]) selectedModifiers[groupName] = [];
+
+      if (isMultiple) {
+        const existingIdx = selectedModifiers[groupName].findIndex(x => x.label === label);
+        if (existingIdx >= 0) {
+          selectedModifiers[groupName].splice(existingIdx, 1);
+          el.classList.remove('selected');
+        } else {
+          selectedModifiers[groupName].push({ label, extra });
+          el.classList.add('selected');
+        }
+      } else {
+        selectedModifiers[groupName] = [{ label, extra }];
+        el.parentElement.querySelectorAll('.mod-chip').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+      }
+
+      updateCustomizerPrice();
+    }
+
+    function updateCustomizerPrice() {
+      if (!activeCustomizingItem) return;
+      let total = activeCustomizingItem.price_inr;
+      Object.values(selectedModifiers).forEach(arr => {
+        arr.forEach(opt => {
+          total += (opt.extra || 0);
+        });
+      });
+      document.getElementById('customItemTotalBtn').textContent = `₹${total.toFixed(2)}`;
+    }
+
+    function closeCustomizerDrawer() {
+      document.getElementById('customizerDrawer').style.display = 'none';
+      activeCustomizingItem = null;
+    }
+
+    function addCustomizedItemToCart() {
+      if (!activeCustomizingItem) return;
+
+      let itemPrice = activeCustomizingItem.price_inr;
+      const modSummary = [];
+      Object.entries(selectedModifiers).forEach(([grp, opts]) => {
+        opts.forEach(o => {
+          itemPrice += (o.extra || 0);
+          modSummary.push(o.extra > 0 ? `${o.label} (+₹${o.extra})` : o.label);
+        });
+      });
+
+      const note = document.getElementById('itemCustomNote').value.trim();
+      if (note) modSummary.push(`Note: ${note}`);
+
+      const cartItem = {
+        cart_id: Date.now() + Math.random(),
+        item_id: activeCustomizingItem.id,
+        name: activeCustomizingItem.name,
+        category: activeCustomizingItem.category,
+        station: activeCustomizingItem.station,
+        unit_price: itemPrice,
+        quantity: 1,
+        modifiers: modSummary.join(' • ')
+      };
+
+      cart.push(cartItem);
+      updateCartDisplay();
+      closeCustomizerDrawer();
+    }
+
+    // Cart Drawer & State
+    function updateCartDisplay() {
+      const count = cart.reduce((acc, it) => acc + it.quantity, 0);
+      const subtotal = cart.reduce((acc, it) => acc + (it.unit_price * it.quantity), 0);
+      const cgst = subtotal * 0.025;
+      const sgst = subtotal * 0.025;
+      const grandTotal = Math.round(subtotal + cgst + sgst);
+
+      document.getElementById('cartCountLabel').textContent = `${count} ITEM${count === 1 ? '' : 'S'}`;
+      document.getElementById('cartTotalLabel').textContent = `₹${grandTotal.toFixed(2)}`;
+      document.getElementById('fireKotPrice').textContent = `₹${grandTotal.toFixed(2)}`;
+
+      document.getElementById('billSubtotal').textContent = `₹${subtotal.toFixed(2)}`;
+      document.getElementById('billTaxes').textContent = `₹${(cgst + sgst).toFixed(2)}`;
+      document.getElementById('billGrandTotal').textContent = `₹${grandTotal.toFixed(2)}`;
+
+      const bar = document.getElementById('stickyCartBar');
+      bar.style.display = count > 0 ? 'flex' : 'none';
+    }
+
+    function openCartDrawer() {
+      const list = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">Your order is currently empty.</div>`;
+      } else {
+        list.innerHTML = cart.map((it, idx) => `
+          <div class="cart-item-row">
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:14px;">${it.name}</div>
+              ${it.modifiers ? `<div style="font-size:11px; color:var(--color-primary);">${it.modifiers}</div>` : ''}
+              <div style="font-family:var(--font-mono); font-size:12px; color:var(--text-muted); margin-top:2px;">₹${it.unit_price.toFixed(2)} each</div>
+            </div>
+            <div class="cart-stepper">
+              <button onclick="updateCartItemQty(${idx}, -1)">-</button>
+              <span style="font-family:var(--font-mono); font-weight:700; min-width:16px; text-align:center;">${it.quantity}</span>
+              <button onclick="updateCartItemQty(${idx}, 1)">+</button>
+            </div>
+          </div>
+        `).join('');
+      }
+      document.getElementById('cartDrawer').style.display = 'flex';
+    }
+
+    function updateCartItemQty(index, change) {
+      if (cart[index]) {
+        cart[index].quantity += change;
+        if (cart[index].quantity <= 0) {
+          cart.splice(index, 1);
+        }
+        updateCartDisplay();
+        openCartDrawer();
+      }
+    }
+
+    function closeCartDrawer() {
+      document.getElementById('cartDrawer').style.display = 'none';
+    }
+
+    // Fire KOT to Kitchen via API
+    async function sendKotToKitchen() {
+      if (cart.length === 0) return;
+      const btn = document.getElementById('fireKotBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<span>TRANSMITTING KOT...</span>`;
+
+      const notes = document.getElementById('orderNotesInput').value.trim();
+
+      try {
+        const payload = {
+          table_number: currentTable,
+          notes: notes,
+          items: cart.map(i => ({
+            item_id: i.item_id,
+            name: i.name,
+            price: i.unit_price,
+            quantity: i.quantity,
+            modifiers: i.modifiers,
+            station: i.station
+          }))
+        };
+
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          activeOrder = data.order;
+          cart = [];
+          updateCartDisplay();
+          closeCartDrawer();
+          displayOrderTracker(data.order);
+        } else {
+          alert('Failed to transmit KOT. Kitchen busy.');
+        }
+      } catch (err) {
+        console.error(err);
+        // Fallback local mock simulation
+        activeOrder = {
+          id: `ORD-2026-${Math.floor(Math.random()*899+100)}`,
+          kot_number: `KOT-${Math.floor(Math.random()*899+100)}`,
+          table_number: currentTable,
+          status: 'NEW',
+          total_inr: cart.reduce((acc, it) => acc + (it.unit_price * it.quantity), 0),
+          created_at: new Date().toISOString(),
+          items: [...cart]
+        };
+        cart = [];
+        updateCartDisplay();
+        closeCartDrawer();
+        displayOrderTracker(activeOrder);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>SEND KOT TO KITCHEN 🔥</span><span id="fireKotPrice">₹0.00</span>`;
+      }
+    }
+
+    // Live Order Cooking Tracker
+    async function syncActiveOrder() {
+      try {
+        const res = await fetch(`/api/orders?table=${currentTable}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.order && (data.order.status !== 'COMPLETED' || data.order.table_number === currentTable)) {
+            activeOrder = data.order;
+            displayOrderTracker(activeOrder);
+          }
+        }
+      } catch (e) {
+        console.warn('Sync order fallback:', e);
+      }
+    }
+
+    function displayOrderTracker(order) {
+      if (!order) return;
+      const card = document.getElementById('orderTrackerCard');
+      card.style.display = 'block';
+
+      document.getElementById('trackerKotId').textContent = `${order.kot_number || 'KOT-409'} • TABLE ${order.table_number || currentTable}`;
+
+      if (order.items && order.items.length > 0) {
+        document.getElementById('trackerItemsSummary').textContent = order.items.map(i => `${i.quantity}x ${i.name}`).join(', ');
+      }
+
+      // 4-Stage Stepper
+      const steps = ['step1', 'step2', 'step3', 'step4'];
+      steps.forEach(s => document.getElementById(s).className = 'step-item');
+
+      const st = (order.status || 'NEW').toUpperCase();
+      if (st === 'NEW') {
+        document.getElementById('step1').className = 'step-item active';
+      } else if (st === 'PREPARING') {
+        document.getElementById('step1').className = 'step-item completed';
+        document.getElementById('step2').className = 'step-item active';
+      } else if (st === 'READY') {
+        document.getElementById('step1').className = 'step-item completed';
+        document.getElementById('step2').className = 'step-item completed';
+        document.getElementById('step3').className = 'step-item active';
+      } else if (st === 'SERVED' || st === 'COMPLETED') {
+        document.getElementById('step1').className = 'step-item completed';
+        document.getElementById('step2').className = 'step-item completed';
+        document.getElementById('step3').className = 'step-item completed';
+        document.getElementById('step4').className = 'step-item active';
+      }
+
+      // Elapsed Timer
+      if (timerInterval) clearInterval(timerInterval);
+      const startTime = new Date(order.created_at || Date.now()).getTime();
+
+      function updateClock() {
+        const elapsedSec = Math.max(0, Math.floor((Date.now() - startTime) / 1000));
+        const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+        const secs = String(elapsedSec % 60).padStart(2, '0');
+        document.getElementById('trackerTimerDisplay').textContent = `⏱️ ${mins}:${secs} ELAPSED`;
+      }
+      updateClock();
+      timerInterval = setInterval(updateClock, 1000);
+    }
+
+    function refreshTracker() {
+      syncActiveOrder();
+    }
+
+    // Bill & UPI Settlement Modal
+    function openBillModal() {
+      const order = activeOrder || {
+        kot_number: 'KOT-409',
+        table_number: currentTable,
+        total_inr: 1610,
+        subtotal_inr: 1533.33,
+        cgst_inr: 38.33,
+        sgst_inr: 38.33,
+        items: [
+          { name: 'Truffle Wild Mushroom Pizza 11"', quantity: 1, unit_price_inr: 770 },
+          { name: 'Nitro Cold Brew Reserve', quantity: 2, unit_price_inr: 280 },
+          { name: 'Basque Burnt Cheesecake Slice', quantity: 1, unit_price_inr: 380 }
+        ]
+      };
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+      const timeStr = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+
+      const total = order.total_inr || 1610;
+      const subtotal = order.subtotal_inr || (total / 1.05).toFixed(2);
+      const tax = (total - subtotal).toFixed(2);
+
+      let itemsHtml = (order.items || []).map(i => `
+        <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+          <span>${i.quantity}x ${i.name}</span>
+          <span>₹${((i.unit_price_inr || i.unit_price || 0) * (i.quantity || 1)).toFixed(2)}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('billPaperContent').innerHTML = `
+        <div style="text-align:center; font-weight:700; margin-bottom:6px;">*** ROAST & CRUST ARTISAN CAFE ***</div>
+        <div style="text-align:center; color:#94A3B8; font-size:11px;">104 Forest Hills, Coorg Heritage Roastery</div>
+        <div style="text-align:center; color:#94A3B8; font-size:11px; margin-bottom:8px;">GSTIN: 32AABCR9988C1Z4 • TABLE #${order.table_number || currentTable}</div>
+        <div style="border-top:1px dashed #334155; margin:6px 0;"></div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:#94A3B8; margin-bottom:6px;">
+          <span>BILL: INV-${order.kot_number || '409'}</span>
+          <span>${dateStr} ${timeStr}</span>
+        </div>
+        <div style="border-top:1px dashed #334155; margin:6px 0;"></div>
+        ${itemsHtml}
+        <div style="border-top:1px dashed #334155; margin:6px 0;"></div>
+        <div style="display:flex; justify-content:space-between; color:#94A3B8;"><span>Subtotal:</span><span>₹${Number(subtotal).toFixed(2)}</span></div>
+        <div style="display:flex; justify-content:space-between; color:#94A3B8;"><span>CGST 2.5% + SGST 2.5%:</span><span>₹${Number(tax).toFixed(2)}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:800; color:#FFF; margin-top:4px;">
+          <span>NET PAYABLE:</span><span>₹${Number(total).toFixed(2)}</span>
+        </div>
+      `;
+
+      updateSplitCalculation(total);
+
+      // Alert Cashier
+      fetch('/api/tables', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'request_bill', table_number: currentTable })
+      }).catch(e => console.warn(e));
+
+      document.getElementById('billModal').style.display = 'flex';
+    }
+
+    function setDinerSplit(count, btn) {
+      splitCount = count;
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const total = activeOrder?.total_inr || 1610;
+      updateSplitCalculation(total);
+    }
+
+    function updateSplitCalculation(total) {
+      const perPerson = (total / splitCount).toFixed(2);
+      document.getElementById('splitPerPersonLabel').textContent = `₹${perPerson} / diner (${splitCount} way${splitCount > 1 ? 's' : ''})`;
+    }
+
+    function closeBillModal() {
+      document.getElementById('billModal').style.display = 'none';
+    }
+
+    function confirmUpiPayment() {
+      alert(`Thank you! Payment notification dispatched to cashier terminal for Table #${currentTable}. Server will bring final stamped receipt.`);
+      closeBillModal();
+    }
+
+    // Table Switcher
+    function openTableSwitcher() {
+      const container = document.getElementById('tableGridContainer');
+      const tables = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+      container.innerHTML = tables.map(t => `
+        <div class="tbl-select-btn ${t === currentTable ? 'active' : ''}" onclick="selectTable('${t}')">
+          TBL #${t}
+        </div>
+      `).join('');
+      document.getElementById('tableSwitcherModal').style.display = 'flex';
+    }
+
+    function selectTable(tbl) {
+      currentTable = tbl;
+      updateTableDisplay();
+      closeTableSwitcher();
+
+      // Update URL query param without reload
+      const url = new URL(window.location);
+      url.searchParams.set('table', tbl);
+      window.history.pushState({}, '', url);
+
+      syncActiveOrder();
+    }
+
+    function closeTableSwitcher() {
+      document.getElementById('tableSwitcherModal').style.display = 'none';
     }
   </script>
 </body>

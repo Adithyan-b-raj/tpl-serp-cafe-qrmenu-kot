@@ -2,65 +2,1232 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-wl-brand>ROAST & CRUST // Darkroom KDS Screen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="theme-tokens.css">
   <script src="whitelabel.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0B0F17; color: #FFF; font-family: monospace; padding: 18px; }
-    .kds-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #1F2937; padding-bottom: 12px; }
-    .kds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .kds-card { background: #111827; border: 2px solid #334155; border-radius: 8px; overflow: hidden; }
-    .kds-top { padding: 10px 14px; display: flex; justify-content: space-between; font-weight: 700; }
-    .sla-green { background: #065F46; color: #34D399; }
-    .sla-amber { background: #78350F; color: #FBBF24; }
-    .sla-red { background: #7F1D1D; color: #F87171; animation: blink 1s infinite; }
-    @keyframes blink { 50% { opacity: 0.6; } }
-    .kds-items { padding: 14px; font-size: 13px; line-height: 1.6; }
-    .bump-btn { width: 100%; background: #10B981; color: #000; border: none; padding: 12px; font-weight: 700; cursor: pointer; }
+    /* Darkroom KDS Workspace */
+    body {
+      background: var(--bg-main, #090D16);
+      color: #F8FAFC;
+      font-family: var(--font-primary, 'Inter', sans-serif);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* KDS Top Header */
+    .kds-app-header {
+      background: #0D131F;
+      border-bottom: 2px solid #1F2937;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .kds-brand-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .kds-logo-pill {
+      background: var(--color-primary, #10B981);
+      color: #051610;
+      font-family: var(--font-mono, monospace);
+      font-weight: 800;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .kds-title {
+      font-size: 17px;
+      font-weight: 800;
+      font-family: var(--font-mono, monospace);
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+
+    /* View Mode Tabs */
+    .mode-switch-group {
+      display: flex;
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 6px;
+      padding: 3px;
+    }
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted, #94A3B8);
+      font-family: var(--font-mono, monospace);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .mode-btn.active {
+      background: var(--color-primary, #10B981);
+      color: #051610;
+    }
+
+    .kds-meta-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono, monospace);
+      font-size: 12px;
+    }
+    .sound-toggle-btn {
+      background: #1E293B;
+      border: 1px solid #334155;
+      color: #FFF;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sound-toggle-btn.muted {
+      color: #EF4444;
+      border-color: #7F1D1D;
+    }
+    .clock-display {
+      background: #111827;
+      border: 1px solid #1F2937;
+      padding: 5px 10px;
+      border-radius: 4px;
+      color: #10B981;
+      font-weight: 700;
+    }
+
+    /* Station Filters Sub-bar */
+    .kds-sub-bar {
+      background: #111827;
+      border-bottom: 1px solid #1F2937;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .station-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+    }
+    .station-btn {
+      background: #1E293B;
+      border: 1px solid #334155;
+      color: #94A3B8;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-family: var(--font-mono, monospace);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .station-btn:hover {
+      border-color: #475569;
+      color: #FFF;
+    }
+    .station-btn.active {
+      background: #FFF;
+      color: #000;
+      border-color: #FFF;
+      font-weight: 700;
+    }
+    .telemetry-summary {
+      display: flex;
+      gap: 14px;
+      font-family: var(--font-mono, monospace);
+      font-size: 12px;
+      color: #94A3B8;
+    }
+
+    /* 4-Column Live Kitchen Display System */
+    .kds-kanban-board {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 20px;
+      min-height: calc(100vh - 120px);
+    }
+    @media (max-width: 1024px) {
+      .kds-kanban-board {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .kds-kanban-board {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kds-col {
+      background: #0E1420;
+      border: 1px solid #1F2937;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      max-height: 85vh;
+    }
+    .kds-col-header {
+      padding: 12px 14px;
+      border-bottom: 2px solid #1F2937;
+      font-family: var(--font-mono, monospace);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #121A2A;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    .col-badge {
+      background: #1E293B;
+      color: #FFF;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .kds-ticket-list {
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    /* KOT Ticket Card */
+    .kot-card {
+      background: #111827;
+      border: 2px solid #334155;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .kot-card:hover {
+      border-color: #475569;
+    }
+    .kot-card-header {
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono, monospace);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    /* Dynamic SLA Timers */
+    .sla-green {
+      background: #065F46;
+      color: #34D399;
+    }
+    .sla-amber {
+      background: #78350F;
+      color: #FBBF24;
+    }
+    .sla-red {
+      background: #7F1D1D;
+      color: #F87171;
+      animation: flashUrgent 1.8s infinite;
+    }
+
+    .kot-card-body {
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+    .kot-table-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #94A3B8;
+      font-family: var(--font-mono, monospace);
+      margin-bottom: 8px;
+      border-bottom: 1px dashed #1F2937;
+      padding-bottom: 6px;
+    }
+    .kot-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 8px 0;
+    }
+    .kot-item-line {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.35;
+    }
+    .kot-item-title {
+      font-weight: 700;
+      color: #FFF;
+      display: flex;
+      justify-content: space-between;
+    }
+    .kot-item-mod {
+      font-size: 11px;
+      color: var(--color-primary, #10B981);
+      margin-top: 2px;
+    }
+    .kot-notes-banner {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #FBBF24;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-top: 8px;
+      font-family: var(--font-mono, monospace);
+    }
+
+    /* Bump Ticket Buttons */
+    .bump-btn {
+      width: 100%;
+      background: var(--color-primary, #10B981);
+      color: #051610;
+      border: none;
+      padding: 12px;
+      font-family: var(--font-mono, monospace);
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .bump-btn:hover {
+      background: #059669;
+      color: #FFF;
+    }
+    .bump-btn-pass {
+      background: #3B82F6;
+      color: #FFF;
+    }
+    .bump-btn-pass:hover {
+      background: #2563EB;
+    }
+    .bump-btn-done {
+      background: #334155;
+      color: #CBD5E1;
+    }
+    .recall-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #334155;
+      color: #94A3B8;
+      padding: 6px;
+      font-family: var(--font-mono, monospace);
+      font-size: 10px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .recall-btn:hover {
+      background: #1E293B;
+      color: #FFF;
+    }
+
+    /* Cashier Table Register View */
+    .cashier-view-wrap {
+      display: none;
+      padding: 20px;
+      flex: 1;
+    }
+    .cashier-stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 768px) {
+      .cashier-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .stat-tile {
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: var(--font-mono, monospace);
+    }
+    .stat-tile-num {
+      font-size: 24px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .table-layout-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .table-layout-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 500px) {
+      .table-layout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .table-floor-card {
+      background: #111827;
+      border: 2px solid #1F2937;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 150px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .table-floor-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+    .table-floor-card.status-vacant {
+      border-color: #334155;
+    }
+    .table-floor-card.status-dining {
+      border-color: #3B82F6;
+      background: #0E1A2F;
+    }
+    .table-floor-card.status-bill-requested {
+      border-color: #F59E0B;
+      background: #231B0A;
+      animation: flashUrgent 2s infinite;
+    }
+    .table-floor-card.status-reserved {
+      border-color: #8B5CF6;
+      background: #19142B;
+    }
+
+    .tbl-top-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .tbl-num-big {
+      font-family: var(--font-mono, monospace);
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .tbl-status-tag {
+      font-family: var(--font-mono, monospace);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .tag-vacant { background: #334155; color: #CBD5E1; }
+    .tag-dining { background: #1D4ED8; color: #93C5FD; }
+    .tag-bill-req { background: #D97706; color: #FEF3C7; }
+    .tag-reserved { background: #6D28D9; color: #EDE9FE; }
+
+    .tbl-body-info {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-bottom: 12px;
+    }
+    .tbl-amount-line {
+      font-family: var(--font-mono, monospace);
+      font-size: 16px;
+      font-weight: 800;
+      color: #FFF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ESC/POS Thermal Bill Modal */
+    .drawer-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .drawer-content {
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+    }
+    .thermal-receipt-tape {
+      background: #FAFAFA;
+      color: #111;
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      line-height: 1.4;
+      border: 1px solid #DDD;
+      border-radius: 4px;
+      margin: 14px 0;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+      user-select: text;
+    }
+    .thermal-line {
+      display: flex;
+      justify-content: space-between;
+    }
+    .receipt-center { text-align: center; }
+    .dashed-rule { border-top: 1px dashed #444; margin: 8px 0; }
   </style>
 </head>
 <body data-layout-archetype="darkroom-kds-board">
-  <div class="kds-header">
-    <h2><span data-wl-brand>ROAST & CRUST</span> // KITCHEN DISPLAY SYSTEM (KDS)</h2>
-    <div>AVG TICKET TIME: 08:42 MINS • ACTIVE ORDERS: 3</div>
+
+  <!-- Top Operations Command Bar -->
+  <header class="kds-app-header">
+    <div class="kds-brand-block">
+      <div class="kds-logo-pill">KDS ACTIVE</div>
+      <h1 class="kds-title">
+        <span data-wl-brand>ROAST & CRUST</span> // OPERATIONS CONSOLE
+      </h1>
+    </div>
+
+    <!-- Mode Switcher -->
+    <div class="mode-switch-group">
+      <button class="mode-btn active" id="btnKdsMode" onclick="switchConsoleMode('kds')">
+        <span>👨‍🍳</span>
+        <span>KDS SLA BOARD</span>
+      </button>
+      <button class="mode-btn" id="btnPosMode" onclick="switchConsoleMode('pos')">
+        <span>🧾</span>
+        <span>CASHIER REGISTER & POS</span>
+      </button>
+    </div>
+
+    <!-- Meta Controls -->
+    <div class="kds-meta-controls">
+      <button class="sound-toggle-btn" id="soundToggleBtn" onclick="toggleAudioChime()">
+        <span id="soundIcon">🔔</span>
+        <span id="soundStatus">SOUND ON</span>
+      </button>
+      <div class="clock-display" id="liveClockDisplay">14:02:18 IST</div>
+      <a href="index.html?table=04" target="_blank" style="color:var(--text-muted); text-decoration:none; font-size:11px;" title="Preview Table 04 QR View">
+        [ TABLE #04 QR ↗ ]
+      </a>
+    </div>
+  </header>
+
+  <!-- Sub-Bar for Station Filters & Telemetry -->
+  <section class="kds-sub-bar" id="kdsSubBar">
+    <div class="station-pills" id="stationPills">
+      <button class="station-btn active" onclick="filterStation('all', this)">ALL STATIONS</button>
+      <button class="station-btn" onclick="filterStation('Espresso Bar', this)">☕ ESPRESSO BAR</button>
+      <button class="station-btn" onclick="filterStation('Hot Kitchen & Grill', this)">🔥 HOT KITCHEN & GRILL</button>
+      <button class="station-btn" onclick="filterStation('Bakery & Pastry', this)">🥐 BAKERY & PASTRY</button>
+    </div>
+    <div class="telemetry-summary">
+      <div>ACTIVE TICKETS: <span id="statActiveKots" style="color:#FFF; font-weight:700;">3</span></div>
+      <div>•</div>
+      <div>AVG SLA: <span id="statAvgSla" style="color:var(--color-primary); font-weight:700;">08:42m</span></div>
+      <div>•</div>
+      <div>SLA TARGET: <span style="color:#FFF; font-weight:700;">15 MINS</span></div>
+    </div>
+  </section>
+
+  <!-- VIEW 1: 4-Column Live Kitchen Display System -->
+  <main class="kds-kanban-board" id="kdsBoard">
+    <!-- Col 1: New KOT Received -->
+    <div class="kds-col">
+      <div class="kds-col-header">
+        <span>1. NEW (KOT RECEIVED)</span>
+        <span class="col-badge" id="badgeCol1">0</span>
+      </div>
+      <div class="kds-ticket-list" id="colNew">
+        <!-- Rendered tickets -->
+      </div>
+    </div>
+
+    <!-- Col 2: In Preparation -->
+    <div class="kds-col">
+      <div class="kds-col-header">
+        <span>2. IN PREPARATION (FIRING)</span>
+        <span class="col-badge" id="badgeCol2">0</span>
+      </div>
+      <div class="kds-ticket-list" id="colPrep">
+        <!-- Rendered tickets -->
+      </div>
+    </div>
+
+    <!-- Col 3: Ready to Serve / Pass -->
+    <div class="kds-col">
+      <div class="kds-col-header">
+        <span>3. READY TO SERVE / PASS 🔔</span>
+        <span class="col-badge" id="badgeCol3">0</span>
+      </div>
+      <div class="kds-ticket-list" id="colReady">
+        <!-- Rendered tickets -->
+      </div>
+    </div>
+
+    <!-- Col 4: Completed / Archived -->
+    <div class="kds-col">
+      <div class="kds-col-header">
+        <span>4. COMPLETED / ARCHIVED</span>
+        <span class="col-badge" id="badgeCol4">0</span>
+      </div>
+      <div class="kds-ticket-list" id="colCompleted">
+        <!-- Rendered tickets -->
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 2: Cashier Table Register & POS -->
+  <section class="cashier-view-wrap" id="cashierView">
+    <div class="cashier-stats-row">
+      <div class="stat-tile">
+        <div style="font-size:11px; color:#94A3B8;">ACTIVE DINING TABLES</div>
+        <div class="stat-tile-num" id="cashierDiningCount" style="color:#3B82F6;">3 / 12</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px; color:#94A3B8;">BILLS REQUESTED (ATTN)</div>
+        <div class="stat-tile-num" id="cashierBillReqCount" style="color:#F59E0B;">1</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px; color:#94A3B8;">VACANT & READY</div>
+        <div class="stat-tile-num" id="cashierVacantCount" style="color:var(--color-primary);">7</div>
+      </div>
+      <div class="stat-tile">
+        <div style="font-size:11px; color:#94A3B8;">RUNNING FLOOR BALANCE</div>
+        <div class="stat-tile-num" id="cashierFloorRevenue" style="color:#FFF;">₹4,870.00</div>
+      </div>
+    </div>
+
+    <!-- 12-Table Layout Grid -->
+    <div class="table-layout-grid" id="tablesFloorGrid">
+      <!-- Injected via JavaScript -->
+    </div>
+  </section>
+
+  <!-- Modal: Settle & Vacate Table with Split Bill & ESC/POS Thermal Bill Preview -->
+  <div class="drawer-overlay" id="settlementModal">
+    <div class="drawer-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #1F2937; padding-bottom:10px;">
+        <div>
+          <h3 style="font-size:16px; font-weight:800; font-family:var(--font-mono);" id="modalTableTitle">TABLE #04 SETTLEMENT</h3>
+          <div style="font-size:11px; color:#94A3B8;" id="modalTableMeta">Window Booth • Server: Rohit S.</div>
+        </div>
+        <button onclick="closeSettlementModal()" style="background:#1E293B; border:none; color:#FFF; width:28px; height:28px; border-radius:50%; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Split Bill Calculator -->
+      <div style="background:#1E293B; border:1px solid #334155; padding:12px; border-radius:6px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:8px;">
+          <span style="font-weight:700;">SPLIT BILL CALCULATOR</span>
+          <span id="cashierSplitValue" style="font-family:var(--font-mono); font-weight:800; color:var(--color-primary);">₹0.00 / cover</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="station-btn active" onclick="setCashierSplit(1, this)">1 Diner</button>
+          <button class="station-btn" onclick="setCashierSplit(2, this)">2 Diners</button>
+          <button class="station-btn" onclick="setCashierSplit(3, this)">3 Diners</button>
+          <button class="station-btn" onclick="setCashierSplit(4, this)">4 Diners</button>
+          <button class="station-btn" onclick="setCashierSplit(6, this)">6 Diners</button>
+        </div>
+      </div>
+
+      <!-- ESC/POS Thermal Bill Preview -->
+      <div class="thermal-receipt-tape" id="escPosReceiptContent">
+        <!-- Rendered 80mm receipt tape -->
+      </div>
+
+      <!-- Tender Options -->
+      <div style="margin: 14px 0;">
+        <div style="font-size:11px; color:#94A3B8; font-family:var(--font-mono); margin-bottom:6px;">PAYMENT TENDER MODE:</div>
+        <div style="display:flex; gap:8px;">
+          <button class="station-btn active" id="tenderUpi" onclick="setTenderMode('UPI', this)">UPI QR</button>
+          <button class="station-btn" id="tenderCash" onclick="setTenderMode('CASH', this)">CASH TENDER</button>
+          <button class="station-btn" id="tenderCard" onclick="setTenderMode('CARD', this)">EDC POS CARD</button>
+        </div>
+      </div>
+
+      <!-- Settlement Actions -->
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button style="flex:1; background:#1E293B; border:1px solid #334155; color:#FFF; padding:12px; font-weight:700; border-radius:6px; cursor:pointer; font-family:var(--font-mono); font-size:12px;" onclick="printThermalBill()">
+          🖨️ PRINT ESC/POS BILL
+        </button>
+        <button style="flex:1.4; background:var(--color-primary); color:#051610; border:none; padding:12px; font-weight:800; border-radius:6px; cursor:pointer; font-family:var(--font-mono); font-size:12px;" onclick="settleAndVacateTable()">
+          SETTLE & VACATE TABLE ✓
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="kds-grid">
-    <div class="kds-card">
-      <div class="kds-top sla-green">
-        <span>TICKET #104 — TABLE 04</span>
-        <span>03:14 MINS</span>
-      </div>
-      <div class="kds-items">
-        <div>• 1x Truffle Wild Mushroom Pizza</div>
-        <div>• 2x Single Origin Nitro Cold Brew</div>
-      </div>
-      <button class="bump-btn" onclick="this.closest('.kds-card').remove()">BUMP TICKET (READY) 🔔</button>
-    </div>
+  <script>
+    // State
+    let audioSoundOn = true;
+    let selectedStation = 'all';
+    let activeConsoleMode = 'kds';
+    let kdsTickets = [];
+    let cafeTables = [];
+    let activeSettlingTable = null;
+    let cashierSplitDiners = 1;
+    let currentTenderMode = 'UPI';
 
-    <div class="kds-card">
-      <div class="kds-top sla-amber">
-        <span>TICKET #103 — TABLE 09</span>
-        <span>07:45 MINS</span>
-      </div>
-      <div class="kds-items">
-        <div>• 1x Smoked Burrata Gnocchi</div>
-        <div>• 1x Sourdough Garlic Bread</div>
-      </div>
-      <button class="bump-btn" onclick="this.closest('.kds-card').remove()">BUMP TICKET (READY) 🔔</button>
-    </div>
+    // Synthesized Web Audio API Chime (Reliable, zero external file dependency!)
+    let audioCtx = null;
+    function playKitchenChime() {
+      if (!audioSoundOn) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
 
-    <div class="kds-card">
-      <div class="kds-top sla-red">
-        <span>TICKET #101 — ZOMATO RIDER #41</span>
-        <span>12:20 MINS (SLA BREACH)</span>
-      </div>
-      <div class="kds-items">
-        <div>• 2x Pepperoni Napoli Pizza</div>
-      </div>
-      <button class="bump-btn" onclick="this.closest('.kds-card').remove()">BUMP TICKET (READY) 🔔</button>
-    </div>
-  </div>
+        const now = audioCtx.currentTime;
+
+        // Two-tone bell chord
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc1.type = 'sine';
+        osc2.type = 'sine';
+
+        osc1.frequency.setValueAtTime(880, now); // A5
+        osc2.frequency.setValueAtTime(1320, now + 0.08); // E6
+
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start(now);
+        osc2.start(now + 0.08);
+        osc1.stop(now + 0.6);
+        osc2.stop(now + 0.6);
+      } catch (e) {
+        console.warn('Audio chime error:', e);
+      }
+    }
+
+    function toggleAudioChime() {
+      audioSoundOn = !audioSoundOn;
+      const btn = document.getElementById('soundToggleBtn');
+      const icon = document.getElementById('soundIcon');
+      const status = document.getElementById('soundStatus');
+      if (audioSoundOn) {
+        btn.classList.remove('muted');
+        icon.textContent = '🔔';
+        status.textContent = 'SOUND ON';
+        playKitchenChime();
+      } else {
+        btn.classList.add('muted');
+        icon.textContent = '🔕';
+        status.textContent = 'MUTED';
+      }
+    }
+
+    // Initial Load & Clock
+    window.addEventListener('DOMContentLoaded', () => {
+      // Clock
+      setInterval(() => {
+        const now = new Date();
+        document.getElementById('liveClockDisplay').textContent = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' }) + ' IST';
+      }, 1000);
+
+      // KDS SLA Timer Ticking
+      setInterval(tickSlaTimers, 1000);
+
+      // Fetch Data
+      fetchKdsTickets();
+      fetchCafeTables();
+
+      // Poll state
+      setInterval(() => {
+        if (activeConsoleMode === 'kds') fetchKdsTickets();
+        if (activeConsoleMode === 'pos') fetchCafeTables();
+      }, 6000);
+    });
+
+    // Console View Mode Switcher
+    function switchConsoleMode(mode) {
+      activeConsoleMode = mode;
+      document.getElementById('btnKdsMode').classList.toggle('active', mode === 'kds');
+      document.getElementById('btnPosMode').classList.toggle('active', mode === 'pos');
+
+      if (mode === 'kds') {
+        document.getElementById('kdsSubBar').style.display = 'flex';
+        document.getElementById('kdsBoard').style.display = 'grid';
+        document.getElementById('cashierView').style.display = 'none';
+        fetchKdsTickets();
+      } else {
+        document.getElementById('kdsSubBar').style.display = 'none';
+        document.getElementById('kdsBoard').style.display = 'none';
+        document.getElementById('cashierView').style.display = 'block';
+        fetchCafeTables();
+      }
+    }
+
+    // Station Filters
+    function filterStation(station, btn) {
+      selectedStation = station;
+      document.querySelectorAll('#stationPills .station-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderKdsColumns();
+    }
+
+    // KDS Ticket Management
+    async function fetchKdsTickets() {
+      try {
+        const res = await fetch('/api/kds');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.tickets) {
+            kdsTickets = data.tickets;
+            renderKdsColumns();
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('API error, using initial mock:', e);
+      }
+    }
+
+    function renderKdsColumns() {
+      const colNew = document.getElementById('colNew');
+      const colPrep = document.getElementById('colPrep');
+      const colReady = document.getElementById('colReady');
+      const colComp = document.getElementById('colCompleted');
+
+      colNew.innerHTML = '';
+      colPrep.innerHTML = '';
+      colReady.innerHTML = '';
+      colComp.innerHTML = '';
+
+      let c1 = 0, c2 = 0, c3 = 0, c4 = 0;
+
+      // Filter by station
+      const filtered = kdsTickets.filter(t => {
+        if (selectedStation === 'all') return true;
+        if (t.station === selectedStation) return true;
+        if (t.items && t.items.some(i => i.station === selectedStation)) return true;
+        return false;
+      });
+
+      filtered.forEach(ticket => {
+        const card = createKotCardElement(ticket);
+        const st = (ticket.status || 'NEW').toUpperCase();
+
+        if (st === 'NEW') {
+          colNew.appendChild(card);
+          c1++;
+        } else if (st === 'PREPARING') {
+          colPrep.appendChild(card);
+          c2++;
+        } else if (st === 'READY') {
+          colReady.appendChild(card);
+          c3++;
+        } else {
+          colComp.appendChild(card);
+          c4++;
+        }
+      });
+
+      document.getElementById('badgeCol1').textContent = c1;
+      document.getElementById('badgeCol2').textContent = c2;
+      document.getElementById('badgeCol3').textContent = c3;
+      document.getElementById('badgeCol4').textContent = c4;
+      document.getElementById('statActiveKots').textContent = c1 + c2 + c3;
+    }
+
+    function createKotCardElement(ticket) {
+      const card = document.createElement('div');
+      card.className = 'kot-card';
+      card.dataset.kot = ticket.kot_number;
+      card.dataset.createdAt = ticket.created_at || new Date().toISOString();
+
+      const elapsedSec = computeElapsedSec(ticket.created_at);
+      const slaClass = getSlaClass(elapsedSec);
+      const elapsedFormatted = formatDuration(elapsedSec);
+
+      let actionButtonHtml = '';
+      const st = (ticket.status || 'NEW').toUpperCase();
+
+      if (st === 'NEW') {
+        actionButtonHtml = `
+          <button class="bump-btn" onclick="bumpTicket('${ticket.kot_number}')">
+            <span>START PREPARATION 🔥</span>
+          </button>
+        `;
+      } else if (st === 'PREPARING') {
+        actionButtonHtml = `
+          <button class="bump-btn bump-btn-pass" onclick="bumpTicket('${ticket.kot_number}')">
+            <span>BUMP TO PASS (READY) 🔔</span>
+          </button>
+        `;
+      } else if (st === 'READY') {
+        actionButtonHtml = `
+          <button class="bump-btn" onclick="bumpTicket('${ticket.kot_number}')">
+            <span>SERVED AT TABLE ✓</span>
+          </button>
+        `;
+      } else {
+        actionButtonHtml = `
+          <button class="recall-btn" onclick="recallTicket('${ticket.kot_number}')">
+            ↩ RECALL / RE-OPEN TICKET
+          </button>
+        `;
+      }
+
+      const itemsHtml = (ticket.items || []).map(i => `
+        <div class="kot-item-line">
+          <div class="kot-item-title">
+            <span>${i.quantity}x ${i.name}</span>
+            <span style="font-size:10px; color:#94A3B8;">${i.station || ''}</span>
+          </div>
+          ${i.modifiers ? `<div class="kot-item-mod">• ${i.modifiers}</div>` : ''}
+        </div>
+      `).join('');
+
+      card.innerHTML = `
+        <div class="kot-card-header ${slaClass}" data-timer-header>
+          <span>${ticket.kot_number} — TBL #${ticket.table_number || '04'}</span>
+          <span data-elapsed-time>${elapsedFormatted}</span>
+        </div>
+        <div class="kot-card-body">
+          <div class="kot-table-meta">
+            <span>${ticket.table_name || `Table ${ticket.table_number}`}</span>
+            <span>SERVER: ${ticket.server_name || 'ROHIT S.'}</span>
+          </div>
+          <div class="kot-items-list">
+            ${itemsHtml}
+          </div>
+          ${ticket.notes ? `<div class="kot-notes-banner">NOTE: ${ticket.notes}</div>` : ''}
+        </div>
+        ${actionButtonHtml}
+      `;
+
+      return card;
+    }
+
+    function computeElapsedSec(created) {
+      if (!created) return 180;
+      const t = new Date(created).getTime();
+      return Math.max(0, Math.floor((Date.now() - t) / 1000));
+    }
+
+    function formatDuration(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${m}:${s} MINS`;
+    }
+
+    function getSlaClass(sec) {
+      if (sec < 8 * 60) return 'sla-green'; // < 8m Green
+      if (sec < 15 * 60) return 'sla-amber'; // 8-15m Amber
+      return 'sla-red'; // > 15m Red Alert
+    }
+
+    function tickSlaTimers() {
+      document.querySelectorAll('.kot-card').forEach(card => {
+        const created = card.dataset.createdAt;
+        const sec = computeElapsedSec(created);
+        const header = card.querySelector('[data-timer-header]');
+        const timeDisplay = card.querySelector('[data-elapsed-time]');
+
+        if (timeDisplay) timeDisplay.textContent = formatDuration(sec);
+        if (header) {
+          const newClass = getSlaClass(sec);
+          header.className = `kot-card-header ${newClass}`;
+        }
+      });
+    }
+
+    // Bump Ticket Action
+    async function bumpTicket(kotNumber) {
+      playKitchenChime();
+
+      // Optimistic UI state advancement
+      const ticket = kdsTickets.find(t => t.kot_number === kotNumber);
+      if (ticket) {
+        const transitions = {
+          'NEW': 'PREPARING',
+          'PREPARING': 'READY',
+          'READY': 'COMPLETED',
+          'COMPLETED': 'COMPLETED'
+        };
+        ticket.status = transitions[ticket.status] || 'COMPLETED';
+        renderKdsColumns();
+      }
+
+      // Sync with API
+      try {
+        await fetch('/api/kds', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ kot_number: kotNumber, action: 'bump' })
+        });
+      } catch (e) {
+        console.warn('API sync failed:', e);
+      }
+    }
+
+    async function recallTicket(kotNumber) {
+      const ticket = kdsTickets.find(t => t.kot_number === kotNumber);
+      if (ticket) {
+        ticket.status = 'READY';
+        renderKdsColumns();
+      }
+      try {
+        await fetch('/api/kds', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ kot_number: kotNumber, action: 'recall' })
+        });
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    // Cashier Table Register & POS View
+    async function fetchCafeTables() {
+      try {
+        const res = await fetch('/api/tables');
+        if (res.ok) {
+          const data = await res.json();
+          cafeTables = data.tables || [];
+          renderCashierTableGrid(data.summary);
+          return;
+        }
+      } catch (e) {
+        console.warn('Tables fetch error:', e);
+      }
+    }
+
+    function renderCashierTableGrid(summary) {
+      const grid = document.getElementById('tablesFloorGrid');
+      if (!cafeTables || cafeTables.length === 0) return;
+
+      if (summary) {
+        document.getElementById('cashierDiningCount').textContent = `${summary.dining} / ${summary.total}`;
+        document.getElementById('cashierBillReqCount').textContent = summary.bill_requested;
+        document.getElementById('cashierVacantCount').textContent = summary.vacant;
+        document.getElementById('cashierFloorRevenue').textContent = `₹${summary.active_revenue.toFixed(2)}`;
+      }
+
+      grid.innerHTML = cafeTables.map(tbl => {
+        const st = (tbl.status || 'VACANT').toUpperCase();
+        let statusClass = 'status-vacant';
+        let tagClass = 'tag-vacant';
+        let statusLabel = 'VACANT';
+
+        if (st === 'DINING') {
+          statusClass = 'status-dining';
+          tagClass = 'tag-dining';
+          statusLabel = 'DINING';
+        } else if (st === 'BILL_REQUESTED') {
+          statusClass = 'status-bill-requested';
+          tagClass = 'tag-bill-req';
+          statusLabel = 'BILL REQ 🔔';
+        } else if (st === 'RESERVED') {
+          statusClass = 'status-reserved';
+          tagClass = 'tag-reserved';
+          statusLabel = 'RESERVED';
+        }
+
+        return `
+          <div class="table-floor-card ${statusClass}" onclick="openTableSettlement('${tbl.table_number}')">
+            <div>
+              <div class="tbl-top-info">
+                <span class="tbl-num-big">TABLE #${tbl.table_number}</span>
+                <span class="tbl-status-tag ${tagClass}">${statusLabel}</span>
+              </div>
+              <div class="tbl-body-info">
+                <div>${tbl.section} • Cap: ${tbl.capacity} Pax</div>
+                ${tbl.guest_name ? `<div style="color:#FFF; font-weight:600; margin-top:3px;">${tbl.guest_name}</div>` : ''}
+                <div style="font-size:11px; margin-top:2px;">Server: ${tbl.server_name || 'Rohit S.'}</div>
+              </div>
+            </div>
+            <div class="tbl-amount-line">
+              <span style="font-size:11px; color:#94A3B8;">BALANCE:</span>
+              <span style="color:${tbl.current_total_inr > 0 ? 'var(--color-primary)' : '#64748B'};">
+                ₹${(tbl.current_total_inr || 0).toFixed(2)}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Settle & Vacate Table Modal
+    function openTableSettlement(tableNum) {
+      const table = cafeTables.find(t => t.table_number === tableNum);
+      if (!table) return;
+      activeSettlingTable = table;
+      cashierSplitDiners = 1;
+
+      document.getElementById('modalTableTitle').textContent = `TABLE #${table.table_number} SETTLEMENT & BILL`;
+      document.getElementById('modalTableMeta').textContent = `${table.section} • Capacity: ${table.capacity} Pax • Server: ${table.server_name || 'Rohit S.'}`;
+
+      renderEscPosReceipt(table);
+      document.getElementById('settlementModal').style.display = 'flex';
+    }
+
+    function renderEscPosReceipt(table) {
+      const total = table.current_total_inr || 1610;
+      const subtotal = (total / 1.05).toFixed(2);
+      const cgst = (subtotal * 0.025).toFixed(2);
+      const sgst = (subtotal * 0.025).toFixed(2);
+
+      const splitAmount = (total / cashierSplitDiners).toFixed(2);
+      document.getElementById('cashierSplitValue').textContent = `₹${splitAmount} / cover (${cashierSplitDiners} ways)`;
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+      const timeStr = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+
+      // Match items from active order if available
+      const kot = kdsTickets.find(t => t.table_number === table.table_number);
+      let itemsLines = '';
+      if (kot && kot.items) {
+        itemsLines = kot.items.map(it => `
+          <div class="thermal-line">
+            <span>${it.quantity}x ${it.name}</span>
+            <span>₹${(it.quantity * 420).toFixed(2)}</span>
+          </div>
+          ${it.modifiers ? `<div style="font-size:9px; color:#555;">  > ${it.modifiers}</div>` : ''}
+        `).join('');
+      } else {
+        itemsLines = `
+          <div class="thermal-line"><span>1x Sourdough Truffle Pizza</span><span>₹680.00</span></div>
+          <div class="thermal-line"><span>2x Nitro Cold Brew Reserve</span><span>₹560.00</span></div>
+          <div class="thermal-line"><span>1x Basque Burnt Cheesecake</span><span>₹370.00</span></div>
+        `;
+      }
+
+      document.getElementById('escPosReceiptContent').innerHTML = `
+        <div class="receipt-center" style="font-weight:800; font-size:13px;">ROAST & CRUST ARTISAN CAFE</div>
+        <div class="receipt-center" style="font-size:10px;">104 FOREST HILLS, COORG ROASTERY</div>
+        <div class="receipt-center" style="font-size:10px;">GSTIN: 32AABCR9988C1Z4 • FSSAI: 11223344001928</div>
+        <div class="dashed-rule"></div>
+        <div class="thermal-line"><span>BILL NO : INV-2026-${table.table_number}</span><span>TABLE : #${table.table_number}</span></div>
+        <div class="thermal-line"><span>DATE    : ${dateStr}</span><span>TIME  : ${timeStr}</span></div>
+        <div class="thermal-line"><span>STEWARD : ${table.server_name || 'ROHIT S.'}</span><span>COVERS: ${table.capacity}</span></div>
+        <div class="dashed-rule"></div>
+        <div class="thermal-line" style="font-weight:700;"><span>ITEM DESCRIPTION</span><span>AMOUNT</span></div>
+        <div class="dashed-rule"></div>
+        ${itemsLines}
+        <div class="dashed-rule"></div>
+        <div class="thermal-line"><span>SUBTOTAL</span><span>₹${subtotal}</span></div>
+        <div class="thermal-line"><span>CGST @ 2.5%</span><span>₹${cgst}</span></div>
+        <div class="thermal-line"><span>SGST @ 2.5%</span><span>₹${sgst}</span></div>
+        <div class="dashed-rule"></div>
+        <div class="thermal-line" style="font-weight:800; font-size:13px;"><span>NET TOTAL</span><span>₹${Number(total).toFixed(2)}</span></div>
+        <div class="thermal-line" style="font-size:10px; color:#444;"><span>SPLIT (${cashierSplitDiners} DINERS)</span><span>₹${splitAmount} / PERSON</span></div>
+        <div class="dashed-rule"></div>
+        <div class="thermal-line"><span>PAYMENT TENDER</span><span>${currentTenderMode}</span></div>
+        <div class="thermal-line"><span>STATUS</span><span>PAID & RECONCILED</span></div>
+        <div class="dashed-rule"></div>
+        <div class="receipt-center" style="font-size:10px;">THANK YOU FOR DINING WITH US!</div>
+        <div class="receipt-center" style="font-size:9px;">POWERED BY BMAD POS CLOUDFLARE EDGE</div>
+      `;
+    }
+
+    function setCashierSplit(diners, btn) {
+      cashierSplitDiners = diners;
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (activeSettlingTable) renderEscPosReceipt(activeSettlingTable);
+    }
+
+    function setTenderMode(mode, btn) {
+      currentTenderMode = mode;
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (activeSettlingTable) renderEscPosReceipt(activeSettlingTable);
+    }
+
+    function closeSettlementModal() {
+      document.getElementById('settlementModal').style.display = 'none';
+      activeSettlingTable = null;
+    }
+
+    function printThermalBill() {
+      window.print();
+    }
+
+    async function settleAndVacateTable() {
+      if (!activeSettlingTable) return;
+      const tNum = activeSettlingTable.table_number;
+
+      try {
+        const res = await fetch('/api/tables', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'settle',
+            table_number: tNum,
+            payment_mode: currentTenderMode
+          })
+        });
+
+        if (res.ok) {
+          playKitchenChime();
+          activeSettlingTable.status = 'VACANT';
+          activeSettlingTable.current_total_inr = 0;
+          activeSettlingTable.guest_name = null;
+          closeSettlementModal();
+          fetchCafeTables();
+        } else {
+          alert('Error settling table.');
+        }
+      } catch (e) {
+        console.warn(e);
+        activeSettlingTable.status = 'VACANT';
+        activeSettlingTable.current_total_inr = 0;
+        closeSettlementModal();
+        fetchCafeTables();
+      }
+    }
+  </script>
 </body>
 </html>

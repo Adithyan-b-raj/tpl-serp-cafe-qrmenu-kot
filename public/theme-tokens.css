@@ -7,7 +7,7 @@
    ========================================================================== */
 
 :root {
-  --font-primary: 'Inter', sans-serif;
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-accent: 'JetBrains Mono', monospace;
   --font-mono: 'JetBrains Mono', monospace;
 
@@ -19,13 +19,74 @@
 
   --bg-main: #090D16;
   --bg-canvas: #111827;
+  --bg-surface: #1E293B;
+  --bg-surface-elevated: #283548;
   --bg-sand: var(--bg-canvas);
 
   --border-color: #1F2937;
+  --border-focus: #374151;
   --border-structural: 2px solid #1F2937;
-  --shadow-token: 0 8px 20px rgba(0, 0, 0, 0.5);
-  --grid-gap-desktop: 14px;
-  --grid-gap-mobile: 10px;
+
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
+
+  --sla-green: #10B981;
+  --sla-green-bg: rgba(16, 185, 129, 0.16);
+  --sla-green-border: rgba(16, 185, 129, 0.4);
+
+  --sla-amber: #F59E0B;
+  --sla-amber-bg: rgba(245, 158, 11, 0.16);
+  --sla-amber-border: rgba(245, 158, 11, 0.4);
+
+  --sla-red: #EF4444;
+  --sla-red-bg: rgba(239, 68, 68, 0.16);
+  --sla-red-border: rgba(239, 68, 68, 0.5);
+
+  --shadow-token: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
   --radius: 8px;
+  --radius-sm: 4px;
+  --radius-pill: 9999px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Base resets & typography */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, kbd, samp, pre, .font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Animations */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.02); }
+}
+
+@keyframes flashUrgent {
+  0%, 100% { background-color: rgba(239, 68, 68, 0.25); border-color: #EF4444; }
+  50% { background-color: rgba(239, 68, 68, 0.6); border-color: #F87171; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
