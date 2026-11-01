@@ -1,17 +1,31 @@
-/* Extracted via tpl-tools-design-extractor for tpl-serp-cafe-qrmenu-kot */
+/* ==========================================================================
+   BMAD Normalized Design Tokens & Movement Blueprint (theme-tokens.css)
+   Movement  : [O] High-Contrast Darkroom KDS SLA Board
+   Archetype : Cloud Kitchen Multi-Brand KDS Kanban & Mobile QR Ordering (Toast KDS / FreshKDS)
+   Reference : https://pos.toasttab.com/products/kitchen-display-system
+   Contract  : whitelabel-and-showroom-contract.md §2 + design-movements-and-layout-blueprints.md
+   ========================================================================== */
+
 :root {
-  --font-primary: 'Plus Jakarta Sans', sans-serif;
-  --font-accent: 'Space Grotesk', sans-serif;
-  --color-primary: #D97706;
+  --font-primary: 'Inter', sans-serif;
+  --font-accent: 'JetBrains Mono', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-primary: #10B981;
   --brand-primary: var(--color-primary);
-  --color-dark: #1C1917;
+
+  --color-dark: #090D16;
   --brand-dark: var(--color-dark);
-  --bg-main: #FFFBEB;
-  --bg-canvas: #FEF3C7;
+
+  --bg-main: #090D16;
+  --bg-canvas: #111827;
   --bg-sand: var(--bg-canvas);
-  --border-color: #FDE68A;
-  --grid-gap-desktop: 28px 22px;
-  --grid-gap-mobile: 16px 14px;
-  --radius: 6px;
+
+  --border-color: #1F2937;
+  --border-structural: 2px solid #1F2937;
+  --shadow-token: 0 8px 20px rgba(0, 0, 0, 0.5);
+  --grid-gap-desktop: 14px;
+  --grid-gap-mobile: 10px;
+  --radius: 8px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
