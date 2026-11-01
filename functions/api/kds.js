@@ -2,84 +2,104 @@
 // GET /api/kds?station=... (Get active KOT tickets)
 // POST /api/kds (Bump ticket to next status or recall)
 
-const INITIAL_KDS_TICKETS = [
-  {
-    id: 'ORD-2026-0409',
-    kot_number: 'KOT-409',
-    table_id: 'TBL-04',
-    table_number: '04',
-    table_name: 'Table 04 (Window Booth)',
-    server_name: 'Rohit S.',
-    status: 'NEW', // Column 1: New KOT Received
-    station: 'Hot Kitchen & Grill',
-    created_at: new Date(Date.now() - 3.5 * 60000).toISOString(),
-    bumped_at: null,
-    sla_target_mins: 15,
-    notes: 'Less ice in Cold Brew. Please bring dessert after pizza.',
-    items: [
-      { name: 'Truffle Wild Mushroom Pizza 11"', quantity: 1, modifiers: 'Traditional Neapolitan • Truffle Oil (+₹90)', station: 'Hot Kitchen & Grill' },
-      { name: 'Nitro Cold Brew Reserve', quantity: 2, modifiers: 'Original Straight Black', station: 'Espresso Bar' },
-      { name: 'Basque Burnt Cheesecake Slice', quantity: 1, modifiers: 'Salted Dulce de Leche (+₹40)', station: 'Bakery & Pastry' }
-    ]
-  },
-  {
-    id: 'ORD-2026-0410',
-    kot_number: 'KOT-410',
-    table_id: 'TBL-09',
-    table_number: '09',
-    table_name: 'Table 09 (Indoor Lounge)',
-    server_name: 'Rohit S.',
-    status: 'PREPARING', // Column 2: In Preparation
-    station: 'Hot Kitchen & Grill',
-    created_at: new Date(Date.now() - 9.2 * 60000).toISOString(),
-    bumped_at: new Date(Date.now() - 5 * 60000).toISOString(),
-    sla_target_mins: 12,
-    notes: 'Extra maple syrup for French Toast.',
-    items: [
-      { name: 'Brioche French Toast w/ Maple & Berries', quantity: 1, modifiers: 'Fresh Organic Berries (+₹70) • Whipped Cream (+₹50)', station: 'Hot Kitchen & Grill' },
-      { name: 'Spanish Cortado', quantity: 2, modifiers: 'Oat Milk (+₹40) • 50% Sugar', station: 'Espresso Bar' }
-    ]
-  },
-  {
-    id: 'ORD-2026-0408',
-    kot_number: 'KOT-408',
-    table_id: 'TBL-07',
-    table_number: '07',
-    table_name: 'Table 07 (Garden Patio)',
-    server_name: 'Priya M.',
-    status: 'READY', // Column 3: Ready to Serve / Pass
-    station: 'Hot Kitchen & Grill',
-    created_at: new Date(Date.now() - 17.5 * 60000).toISOString(),
-    bumped_at: new Date(Date.now() - 2 * 60000).toISOString(),
-    sla_target_mins: 14,
-    notes: 'Patio table. Ready for server pickup.',
-    items: [
-      { name: 'Sourdough Avocado Tartine', quantity: 2, modifiers: 'Poached Farmhouse Egg (+₹45)', station: 'Hot Kitchen & Grill' },
-      { name: 'Ceremonial Matcha Latte', quantity: 1, modifiers: 'Oat Milk • Honey (+₹30)', station: 'Espresso Bar' }
-    ]
-  },
-  {
-    id: 'ORD-2026-0407',
-    kot_number: 'KOT-407',
-    table_id: 'TBL-02',
-    table_number: '02',
-    table_name: 'Table 02 (Bar Counter)',
-    server_name: 'Aravind K.',
-    status: 'COMPLETED', // Column 4: Completed / Archived
-    station: 'Espresso Bar',
-    created_at: new Date(Date.now() - 32 * 60000).toISOString(),
-    bumped_at: new Date(Date.now() - 8 * 60000).toISOString(),
-    sla_target_mins: 10,
-    notes: 'Order served at bar counter.',
-    items: [
-      { name: 'Single Origin Flat White', quantity: 2, modifiers: 'Whole Milk', station: 'Espresso Bar' },
-      { name: 'Twice-Baked Almond Croissant', quantity: 1, modifiers: 'Warm & Crisp', station: 'Bakery & Pastry' }
-    ]
-  }
-];
+function getInitialKdsTickets() {
+  const now = Date.now();
+  return [
+    {
+      id: 'ORD-2026-0409',
+      kot_number: 'KOT-409',
+      table_id: 'TBL-04',
+      table_number: '04',
+      table_name: 'Table 04 (Window Booth)',
+      server_name: 'Rohit S.',
+      status: 'NEW', // Column 1: New KOT Received
+      station: 'Hot Kitchen & Grill',
+      created_at: new Date(now - 3.5 * 60000).toISOString(),
+      bumped_at: null,
+      sla_target_mins: 15,
+      notes: 'Less ice in Cold Brew. Please bring dessert after pizza.',
+      items: [
+        { name: 'Truffle Wild Mushroom Pizza 11"', quantity: 1, modifiers: 'Traditional Neapolitan • Truffle Oil (+₹90)', station: 'Hot Kitchen & Grill' },
+        { name: 'Nitro Cold Brew Reserve', quantity: 2, modifiers: 'Original Straight Black', station: 'Espresso Bar' },
+        { name: 'Basque Burnt Cheesecake Slice', quantity: 1, modifiers: 'Salted Dulce de Leche (+₹40)', station: 'Bakery & Pastry' }
+      ]
+    },
+    {
+      id: 'ORD-2026-0410',
+      kot_number: 'KOT-410',
+      table_id: 'TBL-09',
+      table_number: '09',
+      table_name: 'Table 09 (Indoor Lounge)',
+      server_name: 'Rohit S.',
+      status: 'PREPARING', // Column 2: In Preparation
+      station: 'Hot Kitchen & Grill',
+      created_at: new Date(now - 9.2 * 60000).toISOString(),
+      bumped_at: new Date(now - 5 * 60000).toISOString(),
+      sla_target_mins: 12,
+      notes: 'Extra maple syrup for French Toast.',
+      items: [
+        { name: 'Brioche French Toast w/ Maple & Berries', quantity: 1, modifiers: 'Fresh Organic Berries (+₹70) • Whipped Cream (+₹50)', station: 'Hot Kitchen & Grill' },
+        { name: 'Spanish Cortado', quantity: 2, modifiers: 'Oat Milk (+₹40) • 50% Sugar', station: 'Espresso Bar' }
+      ]
+    },
+    {
+      id: 'ORD-2026-0408',
+      kot_number: 'KOT-408',
+      table_id: 'TBL-07',
+      table_number: '07',
+      table_name: 'Table 07 (Garden Patio)',
+      server_name: 'Priya M.',
+      status: 'READY', // Column 3: Ready to Serve / Pass
+      station: 'Hot Kitchen & Grill',
+      created_at: new Date(now - 12.5 * 60000).toISOString(),
+      bumped_at: new Date(now - 2 * 60000).toISOString(),
+      sla_target_mins: 14,
+      notes: 'Patio table. Ready for server pickup.',
+      items: [
+        { name: 'Sourdough Avocado Tartine', quantity: 2, modifiers: 'Poached Farmhouse Egg (+₹45)', station: 'Hot Kitchen & Grill' },
+        { name: 'Ceremonial Matcha Latte', quantity: 1, modifiers: 'Oat Milk • Honey (+₹30)', station: 'Espresso Bar' }
+      ]
+    },
+    {
+      id: 'ORD-2026-0407',
+      kot_number: 'KOT-407',
+      table_id: 'TBL-02',
+      table_number: '02',
+      table_name: 'Table 02 (Bar Counter)',
+      server_name: 'Aravind K.',
+      status: 'COMPLETED', // Column 4: Completed / Archived
+      station: 'Espresso Bar',
+      created_at: new Date(now - 24 * 60000).toISOString(),
+      bumped_at: new Date(now - 8 * 60000).toISOString(),
+      sla_target_mins: 10,
+      notes: 'Order served at bar counter.',
+      items: [
+        { name: 'Single Origin Flat White', quantity: 2, modifiers: 'Whole Milk', station: 'Espresso Bar' },
+        { name: 'Twice-Baked Almond Croissant', quantity: 1, modifiers: 'Warm & Crisp', station: 'Bakery & Pastry' }
+      ]
+    }
+  ];
+}
 
-// In-memory KDS ticket state
-let kdsState = [...INITIAL_KDS_TICKETS];
+// In-memory KDS ticket state, lazily initialized inside request handler
+let kdsState = null;
+
+function getKdsQueue() {
+  if (!kdsState) {
+    kdsState = getInitialKdsTickets();
+  }
+  // Defensive guard against isolate snapshot time anomalies
+  const now = Date.now();
+  kdsState.forEach((t, idx) => {
+    const createdMs = new Date(t.created_at).getTime();
+    if (isNaN(createdMs) || createdMs < 1672531199000 || createdMs > now) {
+      // Offset realistically: 3m, 9m, 12m, 24m
+      const offsets = [3.5, 9.2, 12.5, 24];
+      t.created_at = new Date(now - (offsets[idx % offsets.length] * 60000)).toISOString();
+    }
+  });
+  return kdsState;
+}
 
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
@@ -116,7 +136,7 @@ export async function onRequestGet({ request, env }) {
     }
 
     if (tickets.length === 0) {
-      tickets = [...kdsState];
+      tickets = getKdsQueue();
     }
 
     // Filter by station if specified
@@ -129,10 +149,14 @@ export async function onRequestGet({ request, env }) {
       });
     }
 
-    // Attach computed SLA minutes
+    // Attach computed SLA minutes evaluated at request time
     const now = Date.now();
     const enrichedTickets = tickets.map(t => {
-      const createdTime = new Date(t.created_at).getTime();
+      let createdTime = new Date(t.created_at).getTime();
+      // Ensure createdTime is valid and recent
+      if (isNaN(createdTime) || createdTime < 1672531199000 || createdTime > now) {
+        createdTime = now - (4 * 60000);
+      }
       const elapsedSec = Math.max(0, Math.floor((now - createdTime) / 1000));
       const elapsedMins = (elapsedSec / 60).toFixed(1);
       return {
@@ -174,10 +198,10 @@ export async function onRequestPost({ request, env }) {
       });
     }
 
+    const queue = getKdsQueue();
     // Find ticket in memory
-    const ticket = kdsState.find(t => t.kot_number === kot_number || t.id === order_id);
+    const ticket = queue.find(t => t.kot_number === kot_number || t.id === order_id);
     if (!ticket) {
-      // Create or locate in fallback
       return new Response(JSON.stringify({ ok: false, error: 'Ticket not found in active KDS queue' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' }

@@ -950,9 +950,16 @@
     }
 
     function computeElapsedSec(created) {
-      if (!created) return 180;
+      if (!created) return 210;
       const t = new Date(created).getTime();
-      return Math.max(0, Math.floor((Date.now() - t) / 1000));
+      const now = Date.now();
+      // Guard against Epoch 0 / isolate snapshot bug / invalid or future date
+      if (isNaN(t) || t < 1577836800000 || t > now) {
+        return 210;
+      }
+      const elapsed = Math.floor((now - t) / 1000);
+      if (elapsed > 86400) return 210;
+      return Math.max(0, elapsed);
     }
 
     function formatDuration(sec) {

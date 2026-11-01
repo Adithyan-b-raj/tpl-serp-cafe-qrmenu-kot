@@ -2,186 +2,204 @@
 // POST /api/orders (Create new KOT order)
 // GET /api/orders?token=... or ?id=... or ?table=... (Track order status)
 
-// In-memory fallback cache for serverless invocation lifecycle
-const MEMORY_ORDERS = new Map([
-  [
-    'ORD-2026-0409',
-    {
-      id: 'ORD-2026-0409',
-      kot_number: 'KOT-409',
-      table_id: 'TBL-04',
-      table_number: '04',
-      token: 'tok_409_demo',
-      status: 'NEW',
-      station: 'Hot Kitchen & Grill',
-      customer_name: 'Aaditya & Friends',
-      customer_phone: '919847011223',
-      subtotal_inr: 1533.33,
-      cgst_inr: 38.33,
-      sgst_inr: 38.33,
-      total_inr: 1610,
-      payment_status: 'UNPAID',
-      notes: 'Less ice in Cold Brew. Please bring dessert after pizza.',
-      created_at: new Date(Date.now() - 4 * 60000).toISOString(),
-      bumped_at: null,
-      items: [
-        {
-          id: 1,
-          name: 'Truffle Wild Mushroom Pizza 11"',
-          quantity: 1,
-          unit_price_inr: 770,
-          modifiers: 'Traditional Neapolitan • Truffle Oil (+₹90)',
-          item_total_inr: 770,
-          station: 'Hot Kitchen & Grill'
-        },
-        {
-          id: 2,
-          name: 'Nitro Cold Brew Reserve',
-          quantity: 2,
-          unit_price_inr: 280,
-          modifiers: 'Original Straight Black',
-          item_total_inr: 560,
-          station: 'Espresso Bar'
-        },
-        {
-          id: 3,
-          name: 'Basque Burnt Cheesecake Slice',
-          quantity: 1,
-          unit_price_inr: 380,
-          modifiers: 'Salted Dulce de Leche (+₹40)',
-          item_total_inr: 380,
-          station: 'Bakery & Pastry'
-        }
-      ]
+function getInitialOrders() {
+  const now = Date.now();
+  return new Map([
+    [
+      'ORD-2026-0409',
+      {
+        id: 'ORD-2026-0409',
+        kot_number: 'KOT-409',
+        table_id: 'TBL-04',
+        table_number: '04',
+        token: 'tok_409_demo',
+        status: 'NEW',
+        station: 'Hot Kitchen & Grill',
+        customer_name: 'Aaditya & Friends',
+        customer_phone: '919847011223',
+        subtotal_inr: 1533.33,
+        cgst_inr: 38.33,
+        sgst_inr: 38.33,
+        total_inr: 1610,
+        payment_status: 'UNPAID',
+        notes: 'Less ice in Cold Brew. Please bring dessert after pizza.',
+        created_at: new Date(now - 4 * 60000).toISOString(),
+        bumped_at: null,
+        items: [
+          {
+            id: 1,
+            name: 'Truffle Wild Mushroom Pizza 11"',
+            quantity: 1,
+            unit_price_inr: 770,
+            modifiers: 'Traditional Neapolitan • Truffle Oil (+₹90)',
+            item_total_inr: 770,
+            station: 'Hot Kitchen & Grill'
+          },
+          {
+            id: 2,
+            name: 'Nitro Cold Brew Reserve',
+            quantity: 2,
+            unit_price_inr: 280,
+            modifiers: 'Original Straight Black',
+            item_total_inr: 560,
+            station: 'Espresso Bar'
+          },
+          {
+            id: 3,
+            name: 'Basque Burnt Cheesecake Slice',
+            quantity: 1,
+            unit_price_inr: 380,
+            modifiers: 'Salted Dulce de Leche (+₹40)',
+            item_total_inr: 380,
+            station: 'Bakery & Pastry'
+          }
+        ]
+      }
+    ],
+    [
+      'ORD-2026-0410',
+      {
+        id: 'ORD-2026-0410',
+        kot_number: 'KOT-410',
+        table_id: 'TBL-09',
+        table_number: '09',
+        token: 'tok_410_demo',
+        status: 'PREPARING',
+        station: 'Hot Kitchen & Grill',
+        customer_name: 'Vikram Roy',
+        customer_phone: '919895044556',
+        subtotal_inr: 1066.66,
+        cgst_inr: 26.67,
+        sgst_inr: 26.67,
+        total_inr: 1120,
+        payment_status: 'UNPAID',
+        notes: 'Extra maple syrup for French Toast.',
+        created_at: new Date(now - 9 * 60000).toISOString(),
+        bumped_at: new Date(now - 4 * 60000).toISOString(),
+        items: [
+          {
+            id: 4,
+            name: 'Brioche French Toast w/ Maple & Berries',
+            quantity: 1,
+            unit_price_inr: 580,
+            modifiers: 'Fresh Organic Berries (+₹70) • Whipped Cream (+₹50)',
+            item_total_inr: 580,
+            station: 'Hot Kitchen & Grill'
+          },
+          {
+            id: 5,
+            name: 'Spanish Cortado',
+            quantity: 2,
+            unit_price_inr: 270,
+            modifiers: 'Oat Milk (+₹40) • 50% Sugar',
+            item_total_inr: 540,
+            station: 'Espresso Bar'
+          }
+        ]
+      }
+    ],
+    [
+      'ORD-2026-0408',
+      {
+        id: 'ORD-2026-0408',
+        kot_number: 'KOT-408',
+        table_id: 'TBL-07',
+        table_number: '07',
+        token: 'tok_408_demo',
+        status: 'READY',
+        station: 'Hot Kitchen & Grill',
+        customer_name: 'Dr. Meera Nambiar',
+        customer_phone: '919447022334',
+        subtotal_inr: 1295.24,
+        cgst_inr: 32.38,
+        sgst_inr: 32.38,
+        total_inr: 1360,
+        payment_status: 'UNPAID',
+        notes: 'Table on Patio. Ready for waiter pickup.',
+        created_at: new Date(now - 12 * 60000).toISOString(),
+        bumped_at: new Date(now - 2 * 60000).toISOString(),
+        items: [
+          {
+            id: 6,
+            name: 'Sourdough Avocado Tartine',
+            quantity: 2,
+            unit_price_inr: 465,
+            modifiers: 'Poached Farmhouse Egg (+₹45)',
+            item_total_inr: 930,
+            station: 'Hot Kitchen & Grill'
+          },
+          {
+            id: 7,
+            name: 'Ceremonial Matcha Latte',
+            quantity: 1,
+            unit_price_inr: 320,
+            modifiers: 'Oat Milk • Honey (+₹30)',
+            item_total_inr: 320,
+            station: 'Espresso Bar'
+          }
+        ]
+      }
+    ],
+    [
+      'ORD-2026-0407',
+      {
+        id: 'ORD-2026-0407',
+        kot_number: 'KOT-407',
+        table_id: 'TBL-02',
+        table_number: '02',
+        token: 'tok_407_demo',
+        status: 'COMPLETED',
+        station: 'Espresso Bar',
+        customer_name: 'Karan Singhania',
+        customer_phone: '919895033445',
+        subtotal_inr: 742.86,
+        cgst_inr: 18.57,
+        sgst_inr: 18.57,
+        total_inr: 780,
+        payment_status: 'BILL_REQUESTED',
+        notes: 'Quick counter lunch. Bill requested.',
+        created_at: new Date(now - 25 * 60000).toISOString(),
+        bumped_at: new Date(now - 10 * 60000).toISOString(),
+        items: [
+          {
+            id: 8,
+            name: 'Single Origin Flat White',
+            quantity: 2,
+            unit_price_inr: 280,
+            modifiers: 'Whole Milk',
+            item_total_inr: 560,
+            station: 'Espresso Bar'
+          },
+          {
+            id: 9,
+            name: 'Twice-Baked Almond Croissant',
+            quantity: 1,
+            unit_price_inr: 220,
+            modifiers: 'Warm & Crisp',
+            item_total_inr: 220,
+            station: 'Bakery & Pastry'
+          }
+        ]
+      }
+    ]
+  ]);
+}
+
+let memoryOrders = null;
+
+function getOrdersStore() {
+  if (!memoryOrders) {
+    memoryOrders = getInitialOrders();
+  }
+  const now = Date.now();
+  for (const ord of memoryOrders.values()) {
+    const createdMs = new Date(ord.created_at).getTime();
+    if (isNaN(createdMs) || createdMs < 1672531199000 || createdMs > now) {
+      ord.created_at = new Date(now - 4 * 60000).toISOString();
     }
-  ],
-  [
-    'ORD-2026-0410',
-    {
-      id: 'ORD-2026-0410',
-      kot_number: 'KOT-410',
-      table_id: 'TBL-09',
-      table_number: '09',
-      token: 'tok_410_demo',
-      status: 'PREPARING',
-      station: 'Hot Kitchen & Grill',
-      customer_name: 'Vikram Roy',
-      customer_phone: '919895044556',
-      subtotal_inr: 1066.66,
-      cgst_inr: 26.67,
-      sgst_inr: 26.67,
-      total_inr: 1120,
-      payment_status: 'UNPAID',
-      notes: 'Extra maple syrup for French Toast.',
-      created_at: new Date(Date.now() - 9 * 60000).toISOString(),
-      bumped_at: new Date(Date.now() - 4 * 60000).toISOString(),
-      items: [
-        {
-          id: 4,
-          name: 'Brioche French Toast w/ Maple & Berries',
-          quantity: 1,
-          unit_price_inr: 580,
-          modifiers: 'Fresh Organic Berries (+₹70) • Whipped Cream (+₹50)',
-          item_total_inr: 580,
-          station: 'Hot Kitchen & Grill'
-        },
-        {
-          id: 5,
-          name: 'Spanish Cortado',
-          quantity: 2,
-          unit_price_inr: 270,
-          modifiers: 'Oat Milk (+₹40) • 50% Sugar',
-          item_total_inr: 540,
-          station: 'Espresso Bar'
-        }
-      ]
-    }
-  ],
-  [
-    'ORD-2026-0408',
-    {
-      id: 'ORD-2026-0408',
-      kot_number: 'KOT-408',
-      table_id: 'TBL-07',
-      table_number: '07',
-      token: 'tok_408_demo',
-      status: 'READY',
-      station: 'Hot Kitchen & Grill',
-      customer_name: 'Dr. Meera Nambiar',
-      customer_phone: '919447022334',
-      subtotal_inr: 1295.24,
-      cgst_inr: 32.38,
-      sgst_inr: 32.38,
-      total_inr: 1360,
-      payment_status: 'UNPAID',
-      notes: 'Table on Patio. Ready for waiter pickup.',
-      created_at: new Date(Date.now() - 18 * 60000).toISOString(),
-      bumped_at: new Date(Date.now() - 2 * 60000).toISOString(),
-      items: [
-        {
-          id: 6,
-          name: 'Sourdough Avocado Tartine',
-          quantity: 2,
-          unit_price_inr: 465,
-          modifiers: 'Poached Farmhouse Egg (+₹45)',
-          item_total_inr: 930,
-          station: 'Hot Kitchen & Grill'
-        },
-        {
-          id: 7,
-          name: 'Ceremonial Matcha Latte',
-          quantity: 1,
-          unit_price_inr: 320,
-          modifiers: 'Oat Milk • Honey (+₹30)',
-          item_total_inr: 320,
-          station: 'Espresso Bar'
-        }
-      ]
-    }
-  ],
-  [
-    'ORD-2026-0407',
-    {
-      id: 'ORD-2026-0407',
-      kot_number: 'KOT-407',
-      table_id: 'TBL-02',
-      table_number: '02',
-      token: 'tok_407_demo',
-      status: 'COMPLETED',
-      station: 'Espresso Bar',
-      customer_name: 'Karan Singhania',
-      customer_phone: '919895033445',
-      subtotal_inr: 742.86,
-      cgst_inr: 18.57,
-      sgst_inr: 18.57,
-      total_inr: 780,
-      payment_status: 'BILL_REQUESTED',
-      notes: 'Quick counter lunch. Bill requested.',
-      created_at: new Date(Date.now() - 35 * 60000).toISOString(),
-      bumped_at: new Date(Date.now() - 10 * 60000).toISOString(),
-      items: [
-        {
-          id: 8,
-          name: 'Single Origin Flat White',
-          quantity: 2,
-          unit_price_inr: 280,
-          modifiers: 'Whole Milk',
-          item_total_inr: 560,
-          station: 'Espresso Bar'
-        },
-        {
-          id: 9,
-          name: 'Twice-Baked Almond Croissant',
-          quantity: 1,
-          unit_price_inr: 220,
-          modifiers: 'Warm & Crisp',
-          item_total_inr: 220,
-          station: 'Bakery & Pastry'
-        }
-      ]
-    }
-  ]
-]);
+  }
+  return memoryOrders;
+}
 
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
@@ -228,7 +246,8 @@ export async function onRequestGet({ request, env }) {
     }
 
     // Fallback: Check memory cache
-    for (const ord of MEMORY_ORDERS.values()) {
+    const store = getOrdersStore();
+    for (const ord of store.values()) {
       if (
         (token && ord.token === token) ||
         (id && ord.id === id) ||
@@ -242,7 +261,7 @@ export async function onRequestGet({ request, env }) {
     }
 
     // Default to latest table order if table requested or Table 04 demo
-    const defaultOrd = MEMORY_ORDERS.get('ORD-2026-0409');
+    const defaultOrd = store.get('ORD-2026-0409');
     return new Response(JSON.stringify({ ok: true, order: defaultOrd }), {
       headers: { 'Content-Type': 'application/json' }
     });
@@ -364,7 +383,8 @@ export async function onRequestPost({ request, env }) {
     }
 
     // Always update memory store
-    MEMORY_ORDERS.set(orderId, newOrder);
+    const store = getOrdersStore();
+    store.set(orderId, newOrder);
 
     return new Response(JSON.stringify({
       ok: true,

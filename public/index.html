@@ -1325,6 +1325,19 @@
       }
     }
 
+    function computeElapsedSec(created) {
+      if (!created) return 210;
+      const t = new Date(created).getTime();
+      const now = Date.now();
+      // Guard against Epoch 0 / isolate snapshot bug / invalid date
+      if (isNaN(t) || t < 1577836800000 || t > now) {
+        return 210;
+      }
+      const elapsed = Math.floor((now - t) / 1000);
+      if (elapsed > 86400) return 210;
+      return Math.max(0, elapsed);
+    }
+
     function displayOrderTracker(order) {
       if (!order) return;
       const card = document.getElementById('orderTrackerCard');
@@ -1357,12 +1370,13 @@
         document.getElementById('step4').className = 'step-item active';
       }
 
-      // Elapsed Timer
+      // Elapsed Timer with defensive guard against snapshot bug
       if (timerInterval) clearInterval(timerInterval);
-      const startTime = new Date(order.created_at || Date.now()).getTime();
+      const initialElapsed = computeElapsedSec(order.created_at);
+      const localStartTime = Date.now() - (initialElapsed * 1000);
 
       function updateClock() {
-        const elapsedSec = Math.max(0, Math.floor((Date.now() - startTime) / 1000));
+        const elapsedSec = Math.max(0, Math.floor((Date.now() - localStartTime) / 1000));
         const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
         const secs = String(elapsedSec % 60).padStart(2, '0');
         document.getElementById('trackerTimerDisplay').textContent = `⏱️ ${mins}:${secs} ELAPSED`;
